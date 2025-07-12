@@ -4,6 +4,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#loginBtn').click(function() {
+  		const username = $('#username').val();
+  		const password = $('#password').val();
+
+     	if(!username  ||  !password){
+     		alert('아이디와 비밀번호를 모두 입력해주세요.');
+     		return;
+     	}
+   		
+
+      $.ajax({
+        url: '/loginAction',
+        type: 'POST',
+        data: {
+          username: username,
+          password: password
+        },
+        success: function(response) {
+          // 서버에서 redirectUrl 넘겨줬을 경우
+          window.location.href = response.redirectUrl;
+        },
+        error: function(xhr) {
+          if (xhr.responseJSON && xhr.responseJSON.message) {
+            alert('로그인 실패: ' + xhr.responseJSON.message);
+          } 
+        }
+      });
+    });
+  });
+</script>
+
 <title>Kurly Login Page</title>
 <style>
 body {font-family: 'Noto Sans KR', sans-serif; background-color: #ffffff; margin: 0; padding: 0;}
@@ -28,12 +62,12 @@ footer {text-align: center; font-size: 12px; color: #888; padding: 18px;}
 </header>
 <div class="container">
   <h2>로그인</h2>
-  <input type="text" placeholder="아이디를 입력해주세요">
-  <input type="password" placeholder="비밀번호를 입력해주세요">
+  <input type="text" id="username" placeholder="아이디를 입력해주세요">
+  <input type="password" id="password" placeholder="비밀번호를 입력해주세요">
   <div class="find-links">
     <a href="#">아이디 찾기</a> | <a href="#">비밀번호 찾기</a>
   </div>
-  <button class="login-button">로그인</button>
+  <button class="login-button" id="loginBtn">로그인</button>
   <button class="signup-button">회원가입</button>
   <div class="social-login">
     <button class="naver-button">네이버로 계속하기</button>

@@ -13,7 +13,7 @@ public class LoginService {
 	}
 	
 	public int loginUser(String username, String password) {
-		loginMapper.loginUser(username,password);
+		return loginMapper.loginUser(username,password);
 	}
 	
 	

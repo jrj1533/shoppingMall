@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.shoppingmall.service.LoginService;
 
+import jakarta.servlet.http.HttpSession;
+
 @RestController
 public class RestLoginController {
 	private LoginService loginService;
@@ -19,8 +21,11 @@ public class RestLoginController {
 	}
 	
 	@PostMapping("/loginAction")
-	public ResponseEntity<?> loginAction(@RequestParam String username, @RequestParam String password) {
+	public ResponseEntity<?> loginAction(@RequestParam String username, @RequestParam String password,
+			HttpSession session) {
 		if(loginService.loginUser(username,password) == 1) {
+			
+			session.setAttribute("username", username); // 로그인 id 저장
 			return ResponseEntity.ok(Collections.singletonMap("redirectUrl", "/mainPage"));
 		}
 		
