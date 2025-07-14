@@ -1,6 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- header_member.jsp: 로그인(회원) 전용 헤더 -->
+<head>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function(){
+	const menus = document.querySelectorAll('.member-menu');
+	
+	menus.forEach(menu => {
+	    menu.addEventListener('click', e => { // 순환하면서 클릭이벤트 등록 
+	      e.stopPropagation();  //클릭이벤트가 부모요소로 전파 x 
+	
+	
+	      menus.forEach(m => {
+	        if (m !== menu) m.classList.remove('open');
+	      });
+	
+	      menu.classList.toggle('open');
+	    })
+	})
+	
+	document.addEventListener('click', ()=>{
+	  menus.forEach(m => m.classList.remove('open'));
+	});
+});
+</script>
+
+</head>
 
 <div class="header-container">
   <div class="auth-bar">
@@ -18,7 +43,11 @@
     <div class="member-menu">
       <a href="#">고객센터</a>
       <span class="arrow">▼</span>
-
+       <ul class="dropdown-menu">
+        <li><a href="/profile">내 정보</a></li>
+        <li><a href="/orders">주문 내역</a></li>
+        <li><a href="/logout">로그아웃</a></li>
+      </ul>
     </div>
   </div>
 
