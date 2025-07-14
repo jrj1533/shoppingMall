@@ -9,11 +9,11 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class MainPageController {
 
-	@GetMapping("mainPage")
+	@GetMapping("/mainPage")
 	public String mainPage(HttpSession session, Model model) {
 		
-		
 		model.addAttribute("username", session.getAttribute("username"));
+		
 		return "mainPage";
 	}
 }
