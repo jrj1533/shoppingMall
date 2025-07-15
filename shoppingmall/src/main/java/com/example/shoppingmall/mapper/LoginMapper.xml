@@ -9,4 +9,12 @@
 	WHERE username = #{username} AND password = #{password}; 
 </select>
 
+<select id="loadUserProfile" parameterType="String" resultType="com.example.shoppingmall.dto.User">
+	SELECT
+	name As name,
+	role_no As roleNo
+	FROM user
+	WHERE username = #{username}
+</select>
+
 </mapper>

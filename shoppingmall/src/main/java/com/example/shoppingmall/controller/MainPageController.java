@@ -12,7 +12,8 @@ public class MainPageController {
 	@GetMapping("/mainPage")
 	public String mainPage(HttpSession session, Model model) {
 		
-		model.addAttribute("username", session.getAttribute("username"));
+		model.addAttribute("roleNo", session.getAttribute("roleNo"));
+		model.addAttribute("name", session.getAttribute("name"));
 		
 		return "mainPage";
 	}

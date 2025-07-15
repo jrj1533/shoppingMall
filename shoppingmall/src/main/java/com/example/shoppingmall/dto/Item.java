@@ -8,6 +8,7 @@ public class Item {
 	private String username;
 	private int optionNo;
 	private String itemTitle;
+	private String itemContent;
 	private String itemAmount;
 	private String status;
 	private String createDate;

@@ -30,13 +30,42 @@ document.addEventListener('DOMContentLoaded', function(){
 <div class="header-container">
   <div class="auth-bar">
     <div class="member-menu">
-      <span>${sessionScope.userName} 님</span>
+      <span>${sessionScope.name} 님</span>
+      <c:choose>
+       <c:when test="${sessionScope.roleNo eq 1 }" >
       <span class="arrow">▼</span>
+       
+      
        <ul class="dropdown-menu">
+      
         <li><a href="/profile">내 정보</a></li>
         <li><a href="/orders">주문 내역</a></li>
         <li><a href="/logout">로그아웃</a></li>
+      
       </ul>
+      </c:when>
+       <c:when test="${sessionScope.roleNo eq 2 }">
+        <span class="arrow">▼</span>
+        
+        <ul class="dropdown-menu">
+        
+        <li><a href="/item/register">상품등록</a></li>
+        <li><a href="/orders">주문 내역</a></li>
+        <li><a href="/logout">로그아웃</a></li>
+       
+       </c:when>
+       
+        <c:when test="${sessionScope.roleNo eq 3 }">
+        <span class="arrow">▼</span>
+        
+        <ul class="dropdown-menu">
+        
+          <li><a href="/profile"></a></li>
+        <li><a href="/orders">주문 내역</a></li>
+        <li><a href="/logout">로그아웃</a></li>
+       
+       </c:when>
+      </c:choose>
       
     </div>
     <span>|</span>
