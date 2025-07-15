@@ -22,14 +22,6 @@ public class Page {
 	private String deliveryStatus;
 	private String ordersStatus;
 	
-	
-	//[장정수] 주문리스트에 필요한 생성자
-	public Page(int rowPerPage, int currentPage) {
-		this.rowPerPage = rowPerPage;
-		this.currentPage = currentPage;
-		this.beginRow = (currentPage - 1) * rowPerPage;
-	}
-	
 	//[장정수] 필터링 추가 페이징
 	public Page(int rowPerPage, int currentPage, String buyer, String deliveryStatus, String ordersStatus) {
 		this.rowPerPage = rowPerPage;
@@ -40,7 +32,4 @@ public class Page {
 		this.ordersStatus = ordersStatus;
 	}
 	
-	
-
-
 }
