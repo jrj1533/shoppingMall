@@ -199,7 +199,7 @@
 		                <td>${list.itemTitle}</td>
 		                <td>${list.optionNo}</td>
 		                <td><fmt:formatNumber value="${list.totalPrice}" type="number" groupingUsed="true"/>원</td>
-		                <td>${list.buyer}</td>
+		                <td>${list.buyerName}</td>
 		                <td>${list.address} ${list.address2} (${list.postCode})</td>
 		                <td>
 		                    <c:choose>
