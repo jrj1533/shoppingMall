@@ -154,6 +154,7 @@
 <body>
 	<h1>주문리스트</h1>
 	
+	<!-- 필터링 + 검색 -->
 	<form action="/seller/orderList" method="get">
 		<input type="hidden" name="page" value="1">
 		<label>주문자:
@@ -191,6 +192,7 @@
 			<th>주문일</th>
 		</tr>
 		
+		<!-- 데이터 값에 따라 출력 -->
 		<c:choose>
 		    <c:when test="${not empty orderList}">
 		        <c:forEach var="list" items="${orderList}">
@@ -203,10 +205,10 @@
 		                <td>${list.address} ${list.address2} (${list.postCode})</td>
 		                <td>
 		                    <c:choose>
-		                        <c:when test="${list.deliveryStatus == 'BEFORE'}">배송준비중</c:when>
+		                        <c:when test="${list.deliveryStatus == 'BEFORE'}">배송준비중 <button type="button" onclick="startDelivery('${list.deliveryNo}')">배송하기</button></c:when>
 		                        <c:when test="${list.deliveryStatus == 'CURRENT'}">배송중</c:when>
 		                        <c:when test="${list.deliveryStatus == 'FINISH'}">배송완료</c:when>
-		                        <c:when test="${list.deliveryStatus == 'CANCEL'}">취소</c:when>
+		                        <c:when test="${list.deliveryStatus == 'CANCEL'}">취소 <button>내역확인</button></c:when>
 		                        <c:otherwise>알수없음</c:otherwise>
 		                    </c:choose>
 		                </td>
@@ -230,6 +232,11 @@
 		    </c:otherwise>
 		</c:choose>
 	</table>
+	
+	<!-- 배송상태 변경 용 -->
+	<form id="deliveryForm" method="post" action="/seller/startDelivery">
+	    <input type="hidden" name="deliveryNo" id="deliveryNoInput">
+	</form>
 	
 	<!-- 페이징 -->
 	<c:if test="${totalPages > 1}">
@@ -273,4 +280,17 @@
 	</c:if>
 
 </body>
+
+<script>
+	function startDelivery(deliveryNo) {
+	const message = confirm("배송을 시작하시겠습니까?")
+	
+		if(message) {
+			document.getElementById("deliveryNoInput").value = deliveryNo;
+			document.getElementById("deliveryForm").submit();
+		} else {
+			alert("배송이 취소되었습니다.");
+		}
+	}
+</script>
 </html>

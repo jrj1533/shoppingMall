@@ -2,9 +2,11 @@ package com.example.shoppingmall.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.shoppingmall.dto.Page;
 import com.example.shoppingmall.mapper.SellerMapper;
@@ -16,10 +18,38 @@ public class SellerService {
 	public int totalCount(Page paging) {
 		return sellerMapper.totalCount(paging);
 	}
-
+	
+	// 주문리스트
 	public List<Map<String, Object>> orderList(int beginRow, int size, String username, String buyer, String deliveryStatus, String ordersStatus) {
 		
 		return sellerMapper.selectOrderList(beginRow, size, username, buyer, deliveryStatus, ordersStatus);
+	}
+
+	// 배송준비중 -> 배송중 업데이트
+	@Transactional
+	public void startDelivery(Integer deliveryNo) { // 배송상태 변경ㅇ, 상태변경시 송장번호 임의 숫자입력 해야함!
+		
+		// 랜던 송장번호 생성 함수
+		String deliveryNumber = generateRandomInvoice();
+		
+		// 송장번호 insert
+		sellerMapper.insertDeliveryNumber(deliveryNo, deliveryNumber);
+		
+		// 배송상태 변태변경 update
+		sellerMapper.startDelivery(deliveryNo);
+	}
+
+	private String generateRandomInvoice() {
+		StringBuilder sb = new StringBuilder();
+		Random rand = new Random();
+
+		for (int i = 0; i < 4; i++) {
+			int num = rand.nextInt(10000); // 0000 ~ 9999
+			sb.append(String.format("%04d", num)); 
+			if (i < 3) sb.append("-"); // 마지막 0000뒤에 - 안붙임
+		}
+
+		return sb.toString();
 	}
 
 }

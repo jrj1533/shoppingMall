@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.shoppingmall.dto.Page;
@@ -66,5 +67,17 @@ public class SellerController {
 		model.addAttribute("totalPages", totalPages);
 
 		return "seller/orderList";
+	}
+	
+	// 주문리스트에서 배송준비중 -> 배송중으로 변경
+	@PostMapping("/seller/startDelivery")
+	public String startDelivery(HttpSession session, @RequestParam  Integer deliveryNo) {
+		
+		String username = (String) session.getAttribute("username");
+		System.out.println("deliveryNo:" + deliveryNo);
+		
+		sellerService.startDelivery(deliveryNo);
+		
+		return "redirect:/seller/orderList";
 	}
 }

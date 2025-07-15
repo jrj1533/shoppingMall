@@ -13,4 +13,8 @@ public interface SellerMapper {
 
 	int totalCount(Page paging);
 
+	void startDelivery(Integer deliverNo);
+
+	void insertDeliveryNumber(Integer deliveryNo, String deliveryNumber);
+
 }
