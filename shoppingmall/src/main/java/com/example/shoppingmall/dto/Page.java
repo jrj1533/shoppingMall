@@ -4,5 +4,43 @@ import lombok.Data;
 
 @Data
 public class Page {
+	private int rowPerPage;
+	private int currentPage;
+	private int beginRow;
+	private int totalCount;
+	private String searchWord; // 검색어
+	private String searchType; // 검색타입  
+	private String searchName;
+	
+	private int lastPage;
+	private int pageCount = 10; // 한 화면에 보여줄 페이지 번호 개수
+	private int startPage;
+	private int endPage;
+	
+	//[장정수] 주문리스트 필터링
+	private String buyer;
+	private String deliveryStatus;
+	private String ordersStatus;
+	
+	
+	//[장정수] 주문리스트에 필요한 생성자
+	public Page(int rowPerPage, int currentPage) {
+		this.rowPerPage = rowPerPage;
+		this.currentPage = currentPage;
+		this.beginRow = (currentPage - 1) * rowPerPage;
+	}
+	
+	//[장정수] 필터링 추가 페이징
+	public Page(int rowPerPage, int currentPage, String buyer, String deliveryStatus, String ordersStatus) {
+		this.rowPerPage = rowPerPage;
+		this.currentPage = currentPage;
+		this.beginRow = (currentPage - 1) * rowPerPage;
+		this.buyer = buyer;
+		this.deliveryStatus = deliveryStatus;
+		this.ordersStatus = ordersStatus;
+	}
+	
+	
+
 
 }
