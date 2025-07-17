@@ -43,6 +43,7 @@
 			<if test="buyer != null and buyer != ''">
 				AND o.username LIKE CONCAT('%', #{buyer}, '%')
 			</if>
+			oc.order_date IS NOT null
 		</where>
 		ORDER BY oc.order_date DESC
 		LIMIT #{beginRow}, #{size}

@@ -10,20 +10,30 @@
 <style>
 	.paging {
 		text-align: center;
-		margin-top: 20px;
+		margin-top: 30px;
+		font-size: 0;
 		user-select: none;
 	}
 	
 	.paging .page,
 	.paging .page-btn {
 		display: inline-block;
-		margin: 0 5px;
-		padding: 6px 12px;
+		margin: 0 4px;
+		padding: 8px 14px;
+		font-size: 14px;
 		color: #333;
 		border: 1px solid #ccc;
 		border-radius: 4px;
+		background-color: #fff;
 		text-decoration: none;
 		cursor: pointer;
+		transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+	}
+	
+	.paging .page:hover,
+	.paging .page-btn:hover {
+		background-color: #eee;
+		color: #000;
 	}
 	
 	.paging .page.current {
@@ -33,6 +43,7 @@
 		cursor: default;
 		border-color: #4CAF50;
 	}
+
 	
 </style>
 </head>
@@ -41,6 +52,7 @@
 	
 	<form action="/admin/deliveryList" method="get">
 		<input type="hidden" name="page" value="1">
+		<input type="hidden" name="size" value="10">
 		판매자 : <input type="text" name="seller" value="${seller != null ? seller : ''}">
 		구매자 : <input type="text" name="buyer" value="${buyer != null ? buyer : ''}">
 		<button>검색</button>
