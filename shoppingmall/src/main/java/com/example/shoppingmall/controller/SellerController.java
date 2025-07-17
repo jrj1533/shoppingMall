@@ -40,25 +40,6 @@ public class SellerController {
 		List<Map<String, Object>> orderList = sellerService.orderList(paging.getBeginRow(), size, username
 				, buyer, deliveryStatus, ordersStatus);
 		
-		// 주문일의 출력 형태
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		for (Map<String, Object> order : orderList) {
-			Object dateObj = order.get("orderDate");
-
-			if (dateObj instanceof LocalDateTime) {
-				order.put("orderDateStr", ((LocalDateTime) dateObj).format(formatter));
-			} else if (dateObj instanceof String) {
-				try {
-					LocalDateTime parsed = LocalDateTime.parse((String) dateObj);
-					order.put("orderDateStr", parsed.format(formatter));
-				} catch (Exception e) {
-					order.put("orderDateStr", dateObj);
-				}
-			} else if (dateObj instanceof java.sql.Timestamp) {
-				LocalDateTime orderDate = ((java.sql.Timestamp) dateObj).toLocalDateTime();
-				order.put("orderDateStr", orderDate.format(formatter));
-			}
-		}
 		// System.out.println("username:" + username);
 		model.addAttribute("username", session.getAttribute("username"));
 		model.addAttribute("buyer", buyer);

@@ -22,6 +22,9 @@ public class Page {
 	private String deliveryStatus;
 	private String ordersStatus;
 	
+	//[장정수] 관리자 배송리스트
+	private String seller;
+	
 	//[장정수] 필터링 추가 페이징
 	public Page(int rowPerPage, int currentPage, String buyer, String deliveryStatus, String ordersStatus) {
 		this.rowPerPage = rowPerPage;
@@ -30,6 +33,15 @@ public class Page {
 		this.buyer = buyer;
 		this.deliveryStatus = deliveryStatus;
 		this.ordersStatus = ordersStatus;
+	}
+
+	//[장정수] 관리자 배송조회
+	public Page(int size, int page, String seller, String buyer) {
+		this.rowPerPage = rowPerPage;
+		this.currentPage = currentPage;
+		this.beginRow = (currentPage - 1) * rowPerPage;
+		this.buyer = seller;
+		this.buyer = buyer;
 	}
 	
 }

@@ -1,0 +1,127 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>배송 조회</title>
+
+<style>
+	.paging {
+		text-align: center;
+		margin-top: 20px;
+		user-select: none;
+	}
+	
+	.paging .page,
+	.paging .page-btn {
+		display: inline-block;
+		margin: 0 5px;
+		padding: 6px 12px;
+		color: #333;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		text-decoration: none;
+		cursor: pointer;
+	}
+	
+	.paging .page.current {
+		background-color: #4CAF50;
+		color: white;
+		font-weight: bold;
+		cursor: default;
+		border-color: #4CAF50;
+	}
+	
+</style>
+</head>
+<body>
+	<h1>배송 조회</h1>
+	
+	<form action="/admin/deliveryList" method="get">
+		<input type="hidden" name="page" value="1">
+		판매자 : <input type="text" name="seller" value="${seller != null ? seller : ''}">
+		구매자 : <input type="text" name="buyer" value="${buyer != null ? buyer : ''}">
+		<button>검색</button>
+	</form>
+	
+	<table border="1">
+		<tr>
+			<th>주문번호</th>
+			<th>송장번호</th>
+			<th>판매자</th>
+			<th>상품명</th>
+			<th>구매자아이디(이름)</th>
+			<th>배송상태</th>
+			<th>주문일시</th>
+			<th>배송시작일</th>
+			<th>배송완료일</th>
+			<th>취소신청일</th>
+		</tr>
+		
+		<c:forEach var="list" items="${deliveryList}">		
+			<tr>
+				<td>${list.orderNo}</td>
+				<td>${list.deliveryNumber}</td>
+				<td>${list.seller}</td>
+				<td>${list.itemName}</td>
+				<td>${list.buyer}(${list.NAME})</td>
+				<td>
+					<c:choose>
+						<c:when test="${list.deliveryStatus == 'BREFORE'}">배송준비중</c:when>
+						<c:when test="${list.deliveryStatus == 'CURRENT'}">배송중</c:when>
+						<c:when test="${list.deliveryStatus == 'FINISH'}">배송완료</c:when>
+						<c:when test="${list.deliveryStatus == 'CENCEL'}">취소</c:when>
+					</c:choose>
+				</td>
+				<td>
+					<fmt:parseDate var="parsedDate" value="${list.orderDate}" pattern="yyyy-MM-dd'T'HH:mm:ss"/>
+					<fmt:formatDate value="${parsedDate}" pattern="yyyy-MM-dd HH:mm"/> 
+				</td>
+				<td>
+					<fmt:parseDate var="parsedDate" value="${list.startDate}" pattern="yyyy-MM-dd'T'HH:mm:ss"/>
+					<fmt:formatDate value="${parsedDate}" pattern="yyyy-MM-dd HH:mm"/> 
+				</td>
+				<td>
+					<fmt:parseDate var="parsedDate" value="${list.endDate}" pattern="yyyy-MM-dd'T'HH:mm:ss"/>
+					<fmt:formatDate value="${parsedDate}" pattern="yyyy-MM-dd HH:mm"/> 
+				</td>
+				<td>
+					<fmt:parseDate var="parsedDate" value="${list.cancelDate}" pattern="yyyy-MM-dd'T'HH:mm:ss"/>
+					<fmt:formatDate value="${parsedDate}" pattern="yyyy-MM-dd HH:mm"/> 
+				</td>
+			</tr>
+		</c:forEach>
+	</table>
+	
+	<!-- 페이징 -->
+	<div class="paging">
+		<c:if test="${currentPage > 1}">
+			<a class="page-btn" href="?page=${currentPage - 1}&seller=${seller}&buyer=${buyer}">이전</a>
+		</c:if>
+	
+		<c:set var="startPage" value="${(currentPage - 1) / 5 * 5 + 1}" />
+		<c:set var="endPage" value="${startPage + 4}" />
+		<c:if test="${endPage > totalPages}">
+			<c:set var="endPage" value="${totalPages}" />
+		</c:if>
+	
+		<c:forEach begin="${startPage}" end="${endPage}" var="i">
+			<c:choose>
+				<c:when test="${i == currentPage}">
+					<span class="page current">${i}</span>
+				</c:when>
+				<c:otherwise>
+					<a class="page" href="?page=${i}&seller=${seller}&buyer=${buyer}">${i}</a>
+				</c:otherwise>
+			</c:choose>
+		</c:forEach>
+	
+		<c:if test="${currentPage < totalPages}">
+			<a class="page-btn" href="?page=${currentPage + 1}&seller=${seller}&buyer=${buyer}">다음</a>
+		</c:if>
+	</div>
+	
+</body>
+</html>

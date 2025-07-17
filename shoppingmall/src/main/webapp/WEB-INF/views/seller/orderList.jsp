@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>주문 리스트</title>
 
 <style>
 	/* 전체 폰트 및 박스 스타일 */
@@ -76,11 +76,14 @@
 		background-color: #f2f2f2;
 		border-bottom: 2px solid #999;
 		text-align: center;
+		height: 50px;
 	}
 	
 	td {
 		border-bottom: 1px solid #ddd;
 		text-align: center;
+		height: 50px;
+		min-height: 50px;
 	}
 
 	tr:nth-child(even) {
@@ -110,45 +113,31 @@
 	}
 	
 	.paging {
-	    text-align: center;
-	    margin-top: 20px;
-	    user-select: none;
+		text-align: center;
+		margin-top: 20px;
+		user-select: none;
 	}
 	
 	.paging .page,
 	.paging .page-btn {
-	    display: inline-block;
-	    margin: 0 5px;
-	    padding: 6px 12px;
-	    color: #333;
-	    border: 1px solid #ccc;
-	    border-radius: 4px;
-	    text-decoration: none;
-	    cursor: pointer;
+		display: inline-block;
+		margin: 0 5px;
+		padding: 6px 12px;
+		color: #333;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		text-decoration: none;
+		cursor: pointer;
 	}
 	
 	.paging .page.current {
-	    background-color: #4CAF50;
-	    color: white;
-	    font-weight: bold;
-	    cursor: default;
-	    border-color: #4CAF50;
+		background-color: #4CAF50;
+		color: white;
+		font-weight: bold;
+		cursor: default;
+		border-color: #4CAF50;
 	}
-	
-	.paging .page-btn:hover,
-	.paging .page:hover {
-	    background-color: #45a049;
-	    color: white;
-	    border-color: #45a049;
-	}
-	
-	.paging .page.current:hover {
-	    background-color: #4CAF50;
-	    color: white;
-	    border-color: #4CAF50;
-	    cursor: default;
-	}
-	
+
 </style>
 </head>
 <body>
@@ -209,7 +198,7 @@
 		                <td>${list.address} ${list.address2} (${list.postCode})</td>
 		                <td>
 		                    <c:choose>
-		                        <c:when test="${list.deliveryStatus == 'BEFORE'}">배송준비중 <button type="button" onclick="startDelivery('${list.deliveryNo}', '${list.orderNo}')">배송하기</button></c:when>
+		                        <c:when test="${list.deliveryStatus == 'BEFORE'}"><button type="button" onclick="startDelivery('${list.deliveryNo}', '${list.orderNo}')">배송하기</button></c:when>
 		                        <c:when test="${list.deliveryStatus == 'CURRENT'}">배송중</c:when>
 		                        <c:when test="${list.deliveryStatus == 'FINISH'}">배송완료</c:when>
 		                        <c:when test="${list.deliveryStatus == 'CANCEL'}">취소 <button>내역확인</button></c:when>
@@ -223,13 +212,16 @@
 		                        <c:otherwise>알수없음</c:otherwise>
 		                    </c:choose>
 		                </td>
-		                <td>${list.orderDateStr}</td>
+		                <td>
+							<fmt:parseDate var="parsedDate" value="${list.orderDate}" pattern="yyyy-MM-dd'T'HH:mm:ss"/>
+							<fmt:formatDate value="${parsedDate}" pattern="yyyy-MM-dd HH:mm"/> 
+						</td>
 		            </tr>
 		        </c:forEach>
 		    </c:when>
 		    <c:otherwise>
 		        <tr>
-		            <td colspan="9" class="empty-result">
+		            <td colspan="11" class="empty-result">
 		                검색 결과가 없습니다.
 		            </td>
 		        </tr>
@@ -244,45 +236,32 @@
 	</form>
 	
 	<!-- 페이징 -->
-	<c:if test="${totalPages > 1}">
-	    <div class="paging">
-	        <c:if test="${currentPage > 1}">
-	            <a href="?page=${currentPage - 1}&buyer=${buyer}&deliveryStatus=${deliveryStatus}&ordersStatus=${ordersStatus}" class="page-btn">이전</a>
-	        </c:if>
+	<div class="paging">
+		<c:if test="${currentPage > 1}">
+			<a class="page-btn" href="?page=${currentPage - 1}&seller=${seller}&buyer=${buyer}">이전</a>
+		</c:if>
 	
-	        <c:set var="startPage" value="${currentPage - 2}" scope="page" />
-	        <c:set var="endPage" value="${currentPage + 2}" scope="page" />
+		<c:set var="startPage" value="${(currentPage - 1) / 5 * 5 + 1}" />
+		<c:set var="endPage" value="${startPage + 4}" />
+		<c:if test="${endPage > totalPages}">
+			<c:set var="endPage" value="${totalPages}" />
+		</c:if>
 	
-	        <c:if test="${startPage < 1}">
-	            <c:set var="endPage" value="${endPage + (1 - startPage)}" scope="page" />
-	            <c:set var="startPage" value="1" scope="page" />
-	        </c:if>
+		<c:forEach begin="${startPage}" end="${endPage}" var="i">
+			<c:choose>
+				<c:when test="${i == currentPage}">
+					<span class="page current">${i}</span>
+				</c:when>
+				<c:otherwise>
+					<a class="page" href="?page=${i}&seller=${seller}&buyer=${buyer}">${i}</a>
+				</c:otherwise>
+			</c:choose>
+		</c:forEach>
 	
-	        <c:if test="${endPage > totalPages}">
-	            <c:set var="startPage" value="${startPage - (endPage - totalPages)}" scope="page" />
-	            <c:set var="endPage" value="${totalPages}" scope="page" />
-	        </c:if>
-	
-	        <c:if test="${startPage < 1}">
-	            <c:set var="startPage" value="1" scope="page" />
-	        </c:if>
-	
-	        <c:forEach begin="${startPage}" end="${endPage}" var="i">
-	            <c:choose>
-	                <c:when test="${i == currentPage}">
-	                    <span class="page current">${i}</span>
-	                </c:when>
-	                <c:otherwise>
-	                    <a href="?page=${i}&buyer=${buyer}&deliveryStatus=${deliveryStatus}&ordersStatus=${ordersStatus}" class="page">${i}</a>
-	                </c:otherwise>
-	            </c:choose>
-	        </c:forEach>
-	
-	        <c:if test="${currentPage < totalPages}">
-	            <a href="?page=${currentPage + 1}&buyer=${buyer}&deliveryStatus=${deliveryStatus}&ordersStatus=${ordersStatus}" class="page-btn">다음</a>
-	        </c:if>
-	    </div>
-	</c:if>
+		<c:if test="${currentPage < totalPages}">
+			<a class="page-btn" href="?page=${currentPage + 1}&seller=${seller}&buyer=${buyer}">다음</a>
+		</c:if>
+	</div>
 
 </body>
 

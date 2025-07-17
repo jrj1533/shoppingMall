@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.shoppingmall.mapper.AdminMapper">
+	
+	<!-- 배송리스트 페이징 -->
+	<select id="totalCount" resultType="int" parameterType="com.example.shoppingmall.dto.Page">
+		SELECT COUNT(*)
+		FROM delivery d
+		inner join orders o
+		<where>
+			<if test="seller != null and seller != ''">
+				AND o.username LIKE CONCAT('%', #{seller}, '%')
+			</if>
+			
+			<if test="buyer != null and buyer != ''">
+				AND o.username LIKE CONCAT('%', #{buyer}, '%')
+			</if>
+		</where>
+	</select>
+	
+	<select id="deliveryList" resultType="map">
+		SELECT d.order_no AS orderNo,
+				d.delivery_number AS deliveryNumber,
+				i.username AS seller,
+				i.item_title AS itemName,
+				o.username AS buyer,
+				u.name AS NAME,
+				d.status AS deliveryStatus,
+				oc.order_date AS orderDate,
+				d.start_date AS startDate,
+				d.end_date AS endDate,
+				d.cancel_date AS cancelDate
+		FROM delivery d
+		INNER JOIN orders o ON d.order_no = o.order_no
+		INNER JOIN order_cart oc ON o.order_no = oc.order_no
+		INNER JOIN item i ON oc.item_no = i.item_no
+		INNER JOIN user u ON o.username = u.username
+		<where>
+			<if test="seller != null and seller != ''">
+				AND i.username LIKE CONCAT('%', #{seller}, '%')
+			</if>
+			
+			<if test="buyer != null and buyer != ''">
+				AND o.username LIKE CONCAT('%', #{buyer}, '%')
+			</if>
+		</where>
+		ORDER BY oc.order_date DESC
+		LIMIT #{beginRow}, #{size}
+	</select>
+</mapper>
