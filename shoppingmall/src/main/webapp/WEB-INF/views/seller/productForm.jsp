@@ -16,13 +16,22 @@
 <body>
   <h2>상품 등록 폼</h2>
   
-  <form action="/item/register" method="post">
-  <!-- enctype="multipart/form-data" -->
+  <form action="/item/register" method="post" enctype="multipart/form-data" > 
     
     <input type="hidden" name="username" value="${sessionScope.username}">
     
 
     <table>
+      <tr>
+      	<th>카테고리</th>
+      	<td><select name="category">
+      		<option value="PC">컴퓨터	</option>
+      		<option value="notebook">노트북</option>
+      	</select>
+      		
+      	</td>
+      </tr>
+    
       <tr>
         <th>상품명</th>
         <td><input type="text" name="itemTitle" required /></td>
@@ -41,7 +50,7 @@
         <th>이미지</th>
         <td id="file-list">
         	<div class="file-input-group">
-        	<input type="file" name="item_file" accept="image/*" /> 
+        	<input type="file" name="itemFile[0]" accept="image/*" /> 
         		<button type="button" class="add-file">추가</button>
         	</div>
        	 </td>
@@ -49,16 +58,18 @@
     </table>
 	
     <h3>옵션</h3>
-    <div id="option-list">
-      <div class="option">
-      	<input type="hidden" name="optionNo" value="1">
-        <label>옵션명: <input type="text" name="optionName" /></label>
-        <label>옵션값: <input type="text" name="optionValue" /></label>
-        <label>재고: <input type="number" name="stock" min="0" /></label>
-        <button type="button" class="remove-option btn">삭제</button>
-      </div>
-    </div>
-    <button type="button" id="add-option" class="btn">옵션 추가</button>
+<div id="option-list">
+  <div class="option">
+    <input type="hidden" name="itemOption[0].optionNo" value="1" />
+    <label>옵션명:   <input  name="itemOption[0].optionName" /></label>
+    <label>옵션값:   <input name="itemOption[0].optionValue" /></label>
+    <label>재고:     <input type="number" name="itemOption[0].stock"    /></label>
+    <button class="remove-option">삭제</button>
+  </div>
+</div>
+<button id="add-option">옵션 추가</button>
+
+
     <hr style="margin:16px 0" />
     <button type="submit" class="btn">등록하기</button>
   </form>
@@ -70,6 +81,7 @@
 	    const group = event.target.closest('.file-input-group');
 	    // file-list 컨테이너
 	    const container = document.getElementById('file-list');
+	    const num = 0 + 1;
 	    
 	    // 새로운 그룹(div)을 만들어서 input+버튼 복제
 	    const newGroup = document.createElement('div');
@@ -77,7 +89,7 @@
 	    
 	    const newInput = document.createElement('input');
 	    newInput.type = 'file';
-	    newInput.name = 'item_file';
+	    newInput.name = 'itemFile['+num+ ']';
 	    newInput.accept = 'image/*';
 	    
 	    const newBtn = document.createElement('button');
@@ -104,42 +116,41 @@
   	
  	document.querySelectorAll('.add-file')
   .forEach(btn => btn.addEventListener('click', addFileInput));
-    // 옵션 추가
-  document.getElementById('add-option').addEventListener('click', () => {
-    const list   = document.getElementById('option-list');
-    const opts   = list.querySelectorAll('.option');
-    const nextNo = opts.length + 1;               // 다음 옵션 번호
+  
+  // 옵션 추가
+document.getElementById('add-option').addEventListener('click', () => {
+  const list = document.getElementById('option-list');
+  const opts = list.querySelectorAll('.option');
+  const idx  = opts.length;          // 0-based
 
-    // 1) 첫 번째 옵션 블록(cloneNode) 복제
-    const newOpt = opts[0].cloneNode(true);
+  // 1) 템플릿 복제
+  const newOpt = opts[0].cloneNode(true);
 
-    // 2) 히든 필드(optionNo) 값 갱신
-    newOpt.querySelector('input[name="optionNo"]').value = nextNo;
-
-    // 3) 나머지 입력 필드는 빈 값으로 초기화
-    newOpt.querySelector('input[name="optionName"]').value  = '';
-    newOpt.querySelector('input[name="optionValue"]').value = '';
-    newOpt.querySelector('input[name="stock"]').value       = '';
-
-    // 4) 삭제 버튼이 제대로 동작하도록(이벤트 위임 대신 개별 바인딩할 때만)
-    //    remove-option 이벤트 바인딩이 이미 위임으로 걸려 있다면 생략해도 OK
-    // newOpt.querySelector('.remove-option')
-    //       .addEventListener('click', removeHandler);
-
-    // 5) 리스트에 추가
-    list.appendChild(newOpt);
+  // 2) name 속성 전체 교체
+  newOpt.querySelectorAll('input').forEach(inp => {
+    const parts = inp.name.split(']');
+    if (parts.length === 2) {
+      const suffix = parts[1];      // ".optionName" 등
+      inp.name = 'itemOption[' + idx + ']' + suffix;
+      inp.value = inp.type === 'hidden' ? idx + 1 : inp.type === 'number'? 0 :'';
+    }
   });
 
-  // 기존에 있던 삭제 버튼 위임 이벤트
+  // 3) 추가
+  list.appendChild(newOpt);
+});
+
+
+  // 옵션 삭제 (이벤트 위임)
   document.getElementById('option-list').addEventListener('click', e => {
     if (e.target.classList.contains('remove-option')) {
       const groups = document.querySelectorAll('#option-list .option');
       if (groups.length > 1) {
         e.target.closest('.option').remove();
-        // (선택) 삭제 후 번호 재정렬 로직을 넣고 싶다면 여기서 다시 순번 매겨도 됩니다.
       }
     }
   });
-  </script>
+</script>
+
 </body>
 </html>

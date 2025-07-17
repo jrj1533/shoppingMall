@@ -15,7 +15,7 @@ public class LoginController {
 		 this.loginService = loginService;
 	}
 	
-	@GetMapping({"/","/login"})  // 로그인 페이지 이동
+	@GetMapping("/login")  // 로그인 페이지 이동
 	public String login() {  
 		return "login";
 	}

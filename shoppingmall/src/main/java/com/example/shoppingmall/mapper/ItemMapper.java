@@ -8,5 +8,5 @@ import com.example.shoppingmall.dto.Item;
 @Mapper
 public interface ItemMapper {
 
-	int insertItem(@Param("item") Item item, @Param("num") int num);
+	int insertItem(@Param("item") Item item);
 }
