@@ -32,7 +32,7 @@ public class SellerController {
 		
 		String username = (String) session.getAttribute("username");
 		
-		Page paging = new Page(size, page, buyer, deliveryStatus, ordersStatus);
+		Page paging = new Page(size, page, buyer, deliveryStatus, ordersStatus, username);
 		int totalCount = sellerService.totalCount(paging);
 		int totalPages = (int) Math.ceil((double) totalCount / size);
 		

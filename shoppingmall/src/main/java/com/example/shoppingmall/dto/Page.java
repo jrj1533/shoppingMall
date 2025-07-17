@@ -21,18 +21,20 @@ public class Page {
 	private String buyer;
 	private String deliveryStatus;
 	private String ordersStatus;
+	private String username;
 	
 	//[장정수] 관리자 배송리스트
 	private String seller;
 	
 	//[장정수] 필터링 추가 페이징
-	public Page(int rowPerPage, int currentPage, String buyer, String deliveryStatus, String ordersStatus) {
+	public Page(int rowPerPage, int currentPage, String buyer, String deliveryStatus, String ordersStatus, String username) {
 		this.rowPerPage = rowPerPage;
 		this.currentPage = currentPage;
 		this.beginRow = (currentPage - 1) * rowPerPage;
 		this.buyer = buyer;
 		this.deliveryStatus = deliveryStatus;
 		this.ordersStatus = ordersStatus;
+		this.username = username;
 	}
 
 	//[장정수] 관리자 배송조회

@@ -238,7 +238,7 @@
 	<!-- 페이징 -->
 	<div class="paging">
 		<c:if test="${currentPage > 1}">
-			<a class="page-btn" href="?page=${currentPage - 1}&seller=${seller}&buyer=${buyer}">이전</a>
+			<a class="page-btn" href="?page=${currentPage - 1}&buyer=${buyer}&deliveryStatus=${deliveryStatus}&ordersStatus=${ordersStatus}">이전</a>
 		</c:if>
 	
 		<c:set var="startPage" value="${(currentPage - 1) / 5 * 5 + 1}" />
@@ -253,13 +253,13 @@
 					<span class="page current">${i}</span>
 				</c:when>
 				<c:otherwise>
-					<a class="page" href="?page=${i}&seller=${seller}&buyer=${buyer}">${i}</a>
+					<a class="page" href="?page=${i}&buyer=${buyer}&deliveryStatus=${deliveryStatus}&ordersStatus=${ordersStatus}">${i}</a>
 				</c:otherwise>
 			</c:choose>
 		</c:forEach>
 	
 		<c:if test="${currentPage < totalPages}">
-			<a class="page-btn" href="?page=${currentPage + 1}&seller=${seller}&buyer=${buyer}">다음</a>
+			<a class="page-btn" href="?page=${currentPage + 1}&buyer=${buyer}&deliveryStatus=${deliveryStatus}&ordersStatus=${ordersStatus}">다음</a>
 		</c:if>
 	</div>
 

@@ -51,9 +51,12 @@
 	<!-- 주문리스트 페이징 -->
 	<select id="totalCount" resultType="int" parameterType="com.example.shoppingmall.dto.Page">
 		SELECT COUNT(*)
-		FROM orders o
-		inner join delivery d
+		FROM order_cart oc
+		inner join item i on oc.item_no = i.item_no
+		inner join orders o on oc.order_no = o.order_no
+		inner join delivery d on o.order_no = d.delivery_no
 		<where>
+			i.username = #{username}
 			<if test="buyer != null and buyer != ''">
 				AND o.username LIKE CONCAT('%', #{buyer}, '%')
 			</if>
