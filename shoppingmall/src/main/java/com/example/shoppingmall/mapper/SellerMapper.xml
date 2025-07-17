@@ -78,4 +78,11 @@
 		UPDATE delivery SET STATUS = 'CURRENT'
 		WHERE delivery_no = #{deliveryNo}
 	</update>
+	
+	<!-- 배송상태 완료처리(스케쥴러) -->
+	<update id="deliveryChangeToFinish">
+		UPDATE delivery SET status = 'finish'
+		where ststus = 'CURRENT'
+		and update_date &lt; DATE_SUB(NOW(), INTERVAL 3 DAY)
+	</update>
 </mapper>

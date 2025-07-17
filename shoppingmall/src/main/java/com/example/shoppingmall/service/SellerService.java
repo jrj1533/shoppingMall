@@ -29,7 +29,7 @@ public class SellerService {
 	@Transactional
 	public void startDelivery(Integer deliveryNo, Integer orderNo) { // 배송상태 변경ㅇ, 상태변경시 송장번호 임의 숫자입력 해야함!
 		
-		// 랜던 송장번호 생성 함수
+		// 랜덤 송장번호 생성 함수
 		String deliveryNumber = generateRandomInvoice();
 		
 		// 송장번호 update
@@ -38,7 +38,8 @@ public class SellerService {
 		// 배송상태 변태변경 update
 		sellerMapper.startDelivery(deliveryNo);
 	}
-
+	
+	// 랜덤 송장 생성 함수
 	private String generateRandomInvoice() {
 		StringBuilder sb = new StringBuilder();
 		Random rand = new Random();
@@ -51,6 +52,11 @@ public class SellerService {
 		}
 
 		return sb.toString();
+	}
+
+	public int deliveryChangeToFinish() {
+		return sellerMapper.deliveryChangeToFinish();
+		
 	}
 
 }
