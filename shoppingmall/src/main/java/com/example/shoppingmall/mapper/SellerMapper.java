@@ -15,6 +15,6 @@ public interface SellerMapper {
 
 	void startDelivery(Integer deliverNo);
 
-	void insertDeliveryNumber(Integer deliveryNo, String deliveryNumber);
+	void updateDeliveryNumber(Integer deliveryNo, Integer orderNo, String deliveryNumber);
 
 }

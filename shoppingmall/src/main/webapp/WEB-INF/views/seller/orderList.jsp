@@ -184,7 +184,9 @@
 			<th>주문번호</th>
 			<th>상품</th>
 			<th>옵션</th>
-			<th>가격</th>
+			<th>옵션세부선택</th>
+			<th>수량</th>
+			<th>결제금액</th>
 			<th>주문자</th>
 			<th>배송주소</th>
 			<th>배송현황</th>
@@ -199,13 +201,15 @@
 		            <tr>
 		                <td>${list.itemNo}</td>
 		                <td>${list.itemTitle}</td>
-		                <td>${list.optionNo}</td>
+		                <td>${list.optionName}</td>
+		                <td>${list.optionValue}</td>
+		                <td>${list.count}</td>
 		                <td><fmt:formatNumber value="${list.totalPrice}" type="number" groupingUsed="true"/>원</td>
 		                <td>${list.buyerName}</td>
 		                <td>${list.address} ${list.address2} (${list.postCode})</td>
 		                <td>
 		                    <c:choose>
-		                        <c:when test="${list.deliveryStatus == 'BEFORE'}">배송준비중 <button type="button" onclick="startDelivery('${list.deliveryNo}')">배송하기</button></c:when>
+		                        <c:when test="${list.deliveryStatus == 'BEFORE'}">배송준비중 <button type="button" onclick="startDelivery('${list.deliveryNo}', '${list.orderNo}')">배송하기</button></c:when>
 		                        <c:when test="${list.deliveryStatus == 'CURRENT'}">배송중</c:when>
 		                        <c:when test="${list.deliveryStatus == 'FINISH'}">배송완료</c:when>
 		                        <c:when test="${list.deliveryStatus == 'CANCEL'}">취소 <button>내역확인</button></c:when>
@@ -236,6 +240,7 @@
 	<!-- 배송상태 변경 용 -->
 	<form id="deliveryForm" method="post" action="/seller/startDelivery">
 	    <input type="hidden" name="deliveryNo" id="deliveryNoInput">
+	    <input type="hidden" name="orderNo" id="orderNoInput">
 	</form>
 	
 	<!-- 페이징 -->
@@ -282,11 +287,12 @@
 </body>
 
 <script>
-	function startDelivery(deliveryNo) {
-	const message = confirm("배송을 시작하시겠습니까?")
+	function startDelivery(deliveryNo, orderNo) {
+	const message = confirm("상품을 발송하시겠습니까?")
 	
 		if(message) {
 			document.getElementById("deliveryNoInput").value = deliveryNo;
+			document.getElementById("orderNoInput").value = orderNo;
 			document.getElementById("deliveryForm").submit();
 		} else {
 			alert("배송이 취소되었습니다.");

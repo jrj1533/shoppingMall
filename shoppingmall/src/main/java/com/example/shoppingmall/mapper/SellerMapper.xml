@@ -6,10 +6,12 @@
 		SELECT
 		    i.item_no AS itemNo,
 		    i.username AS seller,
-		    i.option_no AS optionNo,
 		    i.item_title AS itemTitle,
+		    IO.option_name AS optionName,
+			IO.option_value AS optionValue,
+			oc.count AS count,
 		    i.item_amount AS itemAmount,
-		    u2.name AS buyerName, 
+		    u2.name AS buyerName,
 		    o.total_price AS totalPrice,
 		    o.status AS ordersStatus,
 		    o.order_date AS orderDate,
@@ -17,7 +19,8 @@
 		    a.address AS address,
 		    a.address2 AS address2,
 		    a.post_code AS postCode,
-		    d.delivery_no AS deliveryNo
+		    d.delivery_no AS deliveryNo,
+		    o.order_no AS orderNo
 		FROM order_cart oc
 		INNER JOIN item i ON oc.item_no = i.item_no
 		INNER JOIN user u ON i.username = u.username 
@@ -26,6 +29,7 @@
 		INNER JOIN delivery d ON o.order_no = d.delivery_no
 		INNER JOIN user_address ua ON o.username = ua.username
 		INNER JOIN address a ON ua.address_no = a.address_no
+		INNER JOIN item_option IO ON i.item_no = IO.item_no
 	<where>
 		i.username = #{username}
 		<if test="buyer != null and buyer != ''">
@@ -64,14 +68,14 @@
 		</where>
 	</select>
 	<!-- 운송장번호 insert -->
-	<insert id="insertDeliveryNumber">
-		INSERT INTO delivery (delivery_no, update_date)
-		VALUES (#{deliveryNo}, now())
-	</insert>
+	<update id="updateDeliveryNumber" parameterType="map">
+		UPDATE delivery SET delivery_number = #{deliveryNumber}, update_date = NOW()
+		WHERE delivery_no = #{deliveryNo} AND order_no = #{orderNo}
+	</update>
 	
 	<!-- 배송상태변경 -->
 	<update id="startDelivery">
 		UPDATE delivery SET STATUS = 'CURRENT'
-		WHERE deliver_no = #{deliverNo}
+		WHERE delivery_no = #{deliveryNo}
 	</update>
 </mapper>

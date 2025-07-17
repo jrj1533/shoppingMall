@@ -39,6 +39,8 @@ public class SellerController {
 		
 		List<Map<String, Object>> orderList = sellerService.orderList(paging.getBeginRow(), size, username
 				, buyer, deliveryStatus, ordersStatus);
+		
+		// 주문일의 출력 형태
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		for (Map<String, Object> order : orderList) {
 			Object dateObj = order.get("orderDate");
@@ -71,12 +73,14 @@ public class SellerController {
 	
 	// 주문리스트에서 배송준비중 -> 배송중으로 변경
 	@PostMapping("/seller/startDelivery")
-	public String startDelivery(HttpSession session, @RequestParam  Integer deliveryNo) {
+	public String startDelivery(HttpSession session, @RequestParam  Integer deliveryNo
+								, @RequestParam  Integer orderNo) {
 		
 		String username = (String) session.getAttribute("username");
 		System.out.println("deliveryNo:" + deliveryNo);
+		System.out.println("orderNo:" + orderNo);
 		
-		sellerService.startDelivery(deliveryNo);
+		sellerService.startDelivery(deliveryNo, orderNo);
 		
 		return "redirect:/seller/orderList";
 	}
