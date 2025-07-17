@@ -7,7 +7,7 @@
   <div class="auth-bar">
     <a href="#">회원가입</a>
     <span>|</span>
-    <a href="#">로그인</a>
+    <a href="login">로그인</a>
     <span>|</span>
     <a href="#">고객센터</a>
     <span class="arrow">▼</span>

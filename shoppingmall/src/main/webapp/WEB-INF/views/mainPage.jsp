@@ -115,7 +115,14 @@
 </head>
 <body>
   <%-- 공통 헤더(include) --%>
+  
+  <c:if test="${empty sessionScope.roleNo } ">
+  <jsp:include page="/WEB-INF/views/common/header_guest.jsp" flush="true"/>
+  </c:if>
+  
   <jsp:include page="/WEB-INF/views/common/header_member.jsp" flush="true"/>
+ 
+  
 
   <div class="search-results">
     <%-- 1) 왼쪽: 필터 패널 --%>
