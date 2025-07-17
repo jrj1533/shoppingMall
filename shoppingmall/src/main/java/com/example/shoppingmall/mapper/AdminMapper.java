@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.example.shoppingmall.dto.Admin;
 import com.example.shoppingmall.dto.Page;
 
 @Mapper
@@ -14,5 +15,10 @@ public interface AdminMapper {
 
 	// 배송리스트
 	List<Map<String, Object>> deliveryList(int beginRow, int size, String seller, String buyer);
+	
+	// 관리자 추가
+	int insertAdmin(Admin admin);
+
+	Admin findById(String adminId);
 
 }
