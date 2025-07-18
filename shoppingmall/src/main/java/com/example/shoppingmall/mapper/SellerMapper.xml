@@ -13,7 +13,7 @@
 		    i.item_amount AS itemAmount,
 		    u2.name AS buyerName,
 		    o.total_price AS totalPrice,
-		    o.status AS ordersStatus,
+		    oc.status AS ordersStatus,
 		    o.order_date AS orderDate,
 		    d.status AS deliveryStatus,
 		    a.address AS address,
@@ -86,7 +86,34 @@
 	<!-- 배송상태 완료처리(스케쥴러) -->
 	<update id="deliveryChangeToFinish">
 		UPDATE delivery SET status = 'finish', end_date = NOW()
-		where ststus = 'CURRENT'
+		where status = 'CURRENT'
 		and start_date &lt; DATE_SUB(NOW(), INTERVAL 3 DAY)
+	</update>
+	
+	<!-- 배송완료건 조회 -->
+	<select id="selectFinishDelivery">
+		SELECT
+			o.username AS buyer,
+			o.total_price AS totalPrice,
+			o.order_no AS orderNo
+		FROM delivery d
+		inner join orders o on d.order_no = o.order_no
+		WHERE d.status = 'FINISH'
+		AND d.point_processed = 'N'
+		AND TIMESTAMPDIFF(DAY, end_date, NOW()) &gt;= 7
+	</select>
+	
+	<!-- 포인트 적립 -->
+	<update id="addPoint">
+		UPDATE user
+		SET point = point + #{point}
+		WHERE username = #{username}
+	</update>
+	
+	<!-- 포인트 지급 상태 처리 -->
+	<update id="changPointProvessed">
+		UPDATE delivery
+		SET point_processed = 'Y'
+		WHERE order_no = #{orderNo}
 	</update>
 </mapper>

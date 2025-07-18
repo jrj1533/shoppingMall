@@ -209,6 +209,7 @@
 		                    <c:choose>
 		                        <c:when test="${list.ordersStatus == 'PAYED'}">결제완료</c:when>
 		                        <c:when test="${list.ordersStatus == 'CANCEL'}">결제취소</c:when>
+		                        <c:when test="${list.ordersStatus == 'COMFIRM'}">구매확정</c:when>
 		                        <c:otherwise>알수없음</c:otherwise>
 		                    </c:choose>
 		                </td>

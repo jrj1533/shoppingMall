@@ -19,4 +19,10 @@ public interface SellerMapper {
 
 	int deliveryChangeToFinish();
 
+	List<Map<String, Object>> selectFinishDelivery();
+
+	void addPoint(String buyer, int point);
+
+	int changPointProvessed(Integer orderNo);
+
 }
