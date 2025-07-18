@@ -54,9 +54,38 @@ public class SellerService {
 		return sb.toString();
 	}
 
+	// 배송 완료로 변경
 	public int deliveryChangeToFinish() {
 		return sellerMapper.deliveryChangeToFinish();
 		
+	}
+
+	// 구매확정
+	@Transactional
+	public int deliveryChangeToConfirm() {
+		// 배송완료(FINISH)랑 포인트미지급(N) 상태값의 데이터 구해오기
+		List<Map<String, Object>> finishDelivery = sellerMapper.selectFinishDelivery();
+		
+		int successCount = 0;
+		
+		for(Map<String, Object> delivery : finishDelivery) {
+			String buyer = (String) delivery.get("buyer");
+			Integer orderNo = (Integer) delivery.get("orderNo");
+			Integer totalPrice = (Integer) delivery.get("totalPrice");
+			
+			// 포인트계산
+			int point = (int)(totalPrice * 0.01); // 구매금액의 1%
+			
+			// 적립
+			sellerMapper.addPoint(buyer, point);
+			
+			int result = sellerMapper.changPointProvessed(orderNo);
+			
+			if(result > 0) {
+				successCount ++;
+			}
+		}
+		return successCount;
 	}
 
 }
