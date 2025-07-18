@@ -47,7 +47,7 @@
         <th>이미지</th>
         <td id="file-list">
           <div class="file-input-group">
-            <input type="file" name="itemFile" accept="image/*" />
+            <input type="file" name="itemFile" accept="image/*" required="required" />
             <button type="button" class="add-file btn">추가</button>
           </div>
         </td>
@@ -58,9 +58,9 @@
     <div id="option-list">
       <div class="option">
         <input type="hidden" name="itemOption[0].optionNo" value="1" />
-        <label>옵션명: <input name="itemOption[0].optionName" /></label>
-        <label>옵션값: <input name="itemOption[0].optionValue" /></label>
-        <label>재고: <input type="number" name="itemOption[0].stock" /></label>
+        <label>옵션명: <input name="itemOption[0].optionName" required="required"/></label>
+        <label>옵션값: <input name="itemOption[0].optionValue" required="required" /></label>
+        <label>재고: <input type="number" name="itemOption[0].stock" required="required"/></label>
         <button type="button" class="remove-option btn">삭제</button>
       </div>
     </div>
@@ -82,6 +82,7 @@
         input.type = 'file';
         input.name = 'itemFile';
         input.accept = 'image/*';
+        input.required  = true
 
         const addBtn = document.createElement('button');
         addBtn.type = 'button';
