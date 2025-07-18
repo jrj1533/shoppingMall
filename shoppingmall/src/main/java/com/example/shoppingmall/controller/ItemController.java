@@ -55,13 +55,13 @@ public class ItemController {
 			
 		}
 		
-		List<MultipartFile> itemFile = item.getItemFile();
-		for(MultipartFile i : itemFile) {
-			log.info("파일 개별저장중" +i);
-			
-			itemService.insertItemFile(i, itemNo);
-			
-		}
+		/*
+		 * List<MultipartFile> itemFile = item.getItemFile(); for(MultipartFile file :
+		 * itemFile) {
+		 * 
+		 * if(file != null && !file.isEmpty()) { log.info("파일 개별저장중" +file);
+		 * itemService.insertItemFile(file, itemNo); } }
+		 */
 		
 		
 		return "";

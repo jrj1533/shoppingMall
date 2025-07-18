@@ -17,5 +17,5 @@ public class Item {
 	private String createDate;
 	
 	private List<ItemOption> itemOption = new ArrayList<>();
-	private List<MultipartFile> itemFile = new ArrayList<>();
+	/* private List<MultipartFile> itemFile = new ArrayList<>(); */
 }
