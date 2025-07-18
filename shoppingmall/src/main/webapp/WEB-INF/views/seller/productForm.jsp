@@ -18,7 +18,7 @@
 <body>
   <h2>상품 등록 폼</h2>
 
-  <form action="/item/register" method="post"><!-- enctype="multipart/form-data" -->>
+  <form action="/item/register" method="post" enctype="multipart/form-data" >
     <input type="hidden" name="username" value="${sessionScope.username}" />
 
     <table>

@@ -60,7 +60,7 @@ public class ItemService {
 	}
 
 
-	public void insertItemFile(MultipartFile i, int itemNo) throws IOException {
+	public void insertItemFile(MultipartFile i, int itemNo, int num) throws IOException {
 		Path root = Paths.get(uploadDir);
 		if(Files.notExists(root)) {
 			Files.createDirectories(root);
@@ -73,13 +73,18 @@ public class ItemService {
 		
 		ItemFile meta = new ItemFile();
 		
-		meta.setFileType(ext);
+		meta.setItemNo(itemNo);
 		meta.setFileName(orig);
+		meta.setFilePath(root + "/");
 		meta.setSaveName(saved);
 		meta.setFileSize((int)i.getSize());
-		meta.setItemNo(itemNo);
-		meta.setFilePath(root + "/");
-	
+		meta.setFileType(ext);
+		meta.setFileOrder(num);
+		
+		itemFileMapper.insertFile(meta);
+		
+		
+		
 		
 
 	}

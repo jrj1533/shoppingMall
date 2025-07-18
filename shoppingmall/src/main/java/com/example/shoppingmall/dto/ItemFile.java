@@ -11,4 +11,5 @@ public class ItemFile {
 	private String saveName;
 	private int fileSize;
 	private String fileType;
+	private int fileOrder;
 }

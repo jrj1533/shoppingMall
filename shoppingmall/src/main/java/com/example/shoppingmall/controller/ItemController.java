@@ -55,16 +55,22 @@ public class ItemController {
 			
 		}
 		
-		/*
-		 * List<MultipartFile> itemFile = item.getItemFile(); for(MultipartFile file :
-		 * itemFile) {
-		 * 
-		 * if(file != null && !file.isEmpty()) { log.info("파일 개별저장중" +file);
-		 * itemService.insertItemFile(file, itemNo); } }
-		 */
+		
+		  List<MultipartFile> itemFile = item.getItemFile();
+		  int num = 1; 
+		  for(MultipartFile file :itemFile){
+		  if(file != null && !file.isEmpty()) { 
+		  log.info("파일 개별저장중" +file);
+		  itemService.insertItemFile(file, itemNo, num);
+		  
+		  num++;
+		  }
+		  
+		}
+		 
 		
 		
-		return "";
+		return "redirect:/mainPage";
 	}
 	
 }

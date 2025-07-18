@@ -31,6 +31,8 @@
 	</properties>
 	<dependencies>
 	
+
+	
 	<!-- JSP 컴파일 및 실행 지원 (내장 Tomcat) -->
       <dependency>
           <groupId>org.apache.tomcat.embed</groupId>
@@ -109,11 +111,13 @@
 			<version>3.0.4</version>
 			<scope>test</scope>
 		</dependency>
+		
 		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-test</artifactId>
-			<scope>test</scope>
+		  <groupId>commons-fileupload</groupId>
+		  <artifactId>commons-fileupload</artifactId>
+		  <version>1.4</version>
 		</dependency>
+
 	</dependencies>
 
 	<build>

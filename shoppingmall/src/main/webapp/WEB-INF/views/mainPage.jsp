@@ -116,15 +116,17 @@
 <body>
   <%-- 공통 헤더(include) --%>
   
-  <c:if test="${empty sessionScope.roleNo } ">
+  <c:if test="${sessionScope.roleNo == null or sessionScopre.roleNo == 0}">
   <jsp:include page="/WEB-INF/views/common/header_guest.jsp" flush="true"/>
   </c:if>
-  
+	
+  <c:if test="${sessionScope.roleNo != null and sessionScope.roleNo != 0}">
   <jsp:include page="/WEB-INF/views/common/header_member.jsp" flush="true"/>
- 
+  </c:if>
+	
   
 
-  <div class="search-results">
+  <div class="search-results">s
     <%-- 1) 왼쪽: 필터 패널 --%>
     <aside class="filter-panel">
       <h4>필터</h4>
