@@ -50,13 +50,13 @@
 	</select>
 	
 			<!-- 관리자 추가 -->
-		<insert id="insertAdmin" parameterType="com.example.shoppingmall.domain.AdminDomain">
+		<insert id="insertAdmin" parameterType="com.example.shoppingmall.dto.Admin">
 			INSERT INTO admin (admin_id, password, role_no)
 				VALUES (#{adminId}, #{password}, #{roleNo})
 		</insert>
 		
 		<!-- 관리자 아이디 조회 -->
-		<select id="findById" resultType="com.example.shoppingmall.domain.AdminDomain">
+		<select id="findById" resultType="com.example.shoppingmall.dto.Admin">
 			SELECT admin_id AS adminId, password
 			FROM admin
 			WHERE admin_id = #{admin}

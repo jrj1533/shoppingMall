@@ -54,11 +54,11 @@ public class AdminInitializer {
 				
 				adminMapper.insertAdmin(admin);	// DB에 관리자 추가
 				
-				System.out.println("최초 관리자 계정 생성완료 (아이디:JJY / 비밀번호:");
+				System.out.println("최초 관리자 계정 생성완료 (아이디:JJY / 비밀번호:)");
 				
 			} else {
 				// 이미 관리자 아이디가 있는 경우
-				System.out.println("관리자 계정 이미 존재함 (아이디: JJY");
+				System.out.println("관리자 계정 이미 존재함 (아이디: admin)");
 			}
 			
 		} catch(Exception e) {
