@@ -46,4 +46,12 @@ public class Page {
 		this.buyer = buyer;
 	}
 	
+	//[유빈] 승인전 상품 조회
+	public Page(int rowPerPage, int currentPage) {
+		this.rowPerPage = rowPerPage;
+		this.currentPage = currentPage;
+		this.beginRow = (currentPage-1)*rowPerPage;
+		
+	}
+	
 }

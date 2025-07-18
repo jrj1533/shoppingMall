@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.shoppingmall.mapper.AdminProductMapper">
+	<select id="findRequestingItem" resultType="map">
+		SELECT item_no AS itemNo, category As category , username As username, item_title As itemTitle , create_date As createDate FROM item 
+			WHERE status = 'REQUESTING' limit #{beginRow}, #{size}; 
+	</select>
+	
+	<select id="totalfindRequestingItem">
+		SELECT COUNT(*) from item WHERE status = 'REQUESTING';
+	</select>
+</mapper>
