@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.shoppingmall.dto.Admin;
+import com.example.shoppingmall.dto.AdminLogin;
 import com.example.shoppingmall.service.LoginService;
 
 import jakarta.servlet.http.HttpSession;
@@ -26,17 +27,20 @@ public class LoginController {
 	}
 	
 	@PostMapping("/admin/loginAdmin")
-	public String loginAdmin(Admin adminDto, 
+	public String loginAdmin(AdminLogin dto, 
 							 HttpSession session,
 							 RedirectAttributes ra) {
 		try {
 			// 서비스에서 정보 호출
-			Admin loginAdmin = loginService.loginAdmin(adminDto);
+			 Admin admin = loginService.loginAdmin(dto);
+			 
+			// roleNo 같은 부가 정보는 따로 조회
+		    Admin adminProfile = loginService.adminProfile(admin.getAdminId());
 			
 			// 로그인 성공 시 세션에 저장
-			session.setAttribute("loginAdmin", loginAdmin.getAdminId());
-			session.setAttribute("name", loginAdmin.getAdminId());
-			session.setAttribute("roleNo", loginAdmin.getRoleNo());
+			session.setAttribute("loginAdmin", adminProfile.getAdminNo());
+			session.setAttribute("name", adminProfile.getAdminId());
+			session.setAttribute("roleNo", adminProfile.getRoleNo());
 			
 			// 로그인 후 관리자 메인페이지로 이동
 			return "redirect:/mainPage";

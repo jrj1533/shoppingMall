@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.shoppingmall.dto.Admin;
 import com.example.shoppingmall.dto.Page;
 import com.example.shoppingmall.service.AdminService;
 
@@ -43,4 +44,16 @@ public class AdminController {
 
 		return "/admin/deliveryList";
 	}
+	
+	// 관리자 리스트 출력
+	@GetMapping("/admin/adminList")
+	public String adminList(Model model) {
+		List<Admin> adminList = adminService.adminList();
+		
+		model.addAttribute("adminList", adminList);
+		
+		return "/admin/adminList";
+	}
+	
+	// 관리자 생성
 }

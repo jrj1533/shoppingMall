@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.example.shoppingmall.dto.Admin;
+import com.example.shoppingmall.dto.AdminLogin;
 import com.example.shoppingmall.dto.Page;
 
 @Mapper
@@ -19,6 +20,16 @@ public interface AdminMapper {
 	// 관리자 추가
 	int insertAdmin(Admin admin);
 
-	Admin findById(String adminId);
+	// 관리자 로그인
+	Admin loginAdmin(AdminLogin dto);
+	
+	// 관리자 정보 조회
+	Admin adminProfile(String adminId);
+	
+	// 관리자 리스트(인원이 많지 않아서 map으로 안받음)
+	List<Admin> adminList();
+	
+	// 관리자 아이디 중복확인
+	int adminIdCheck(String adminId);
 
 }

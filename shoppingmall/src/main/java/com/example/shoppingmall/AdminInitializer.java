@@ -42,7 +42,7 @@ public class AdminInitializer {
 		
 		try {
 			// DB에 이미 관리자 아이디가 있는 지 조회
-			Admin existingAdmin = adminMapper.findById(adminId);
+			Admin existingAdmin = adminMapper.adminProfile(adminId);
 			
 			// 없으면 새로 생성
 			

@@ -2,19 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.shoppingmall.mapper.LoginMapper">
 
-<select id="loginUser" resultType="int"> 
-	SELECT
-	COUNT(*)
-	FROM user 
-	WHERE username = #{username} AND password = #{password}; 
-</select>
-
-<select id="loadUserProfile" parameterType="String" resultType="com.example.shoppingmall.dto.User">
-	SELECT
-	name As name,
-	role_no As roleNo
-	FROM user
-	WHERE username = #{username}
-</select>
+	<!-- user 로그인 -->
+	<select id="loginUser" resultType="int"> 
+		SELECT
+		COUNT(*)
+		FROM user 
+		WHERE username = #{username} AND password = #{password}; 
+	</select>
+	
+	<!-- user 정보 조회 -->
+	<select id="loadUserProfile" parameterType="String" resultType="com.example.shoppingmall.dto.User">
+		SELECT
+		name As name,
+		role_no As roleNo
+		FROM user
+		WHERE username = #{username}
+	</select>
+	
+	<!-- user 회원가입 -->
+	
+	<!-- user 정보수정 -->
 
 </mapper>
