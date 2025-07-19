@@ -57,9 +57,12 @@
 		
 		<!-- 관리자 아이디 조회 -->
 		<select id="findById" resultType="com.example.shoppingmall.dto.Admin">
-			SELECT admin_id AS adminId, password
+			SELECT admin_no AS adminNo,
+				   role_no AS roleNo, 
+				   admin_id AS adminId, 
+				   password
 			FROM admin
-			WHERE admin_id = #{admin}
+			WHERE admin_id = #{adminId}
 		</select>
 	
 </mapper>

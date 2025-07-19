@@ -30,17 +30,42 @@ document.addEventListener('DOMContentLoaded', function(){
 <div class="header-container">
   <div class="auth-bar">
     <div class="member-menu">
-      <span>${sessionScope.name} 님</span>
-      <c:choose>
+	  <c:choose>
+	    <c:when test="${sessionScope.roleNo eq 4}">
+	    	<span>통합관리자님</span>
+	    </c:when>
+	    <c:when test="${sessionScope.roleNo eq 1}">
+	    	<span>관리자님</span>
+	    </c:when>
+	    <c:otherwise>
+	      <span>${sessionScope.name} 님</span>
+	    </c:otherwise>
+	  </c:choose>
+	  
+	   <c:choose>
+	 	<%--통합관리자 --%>
+       <c:when test="${sessionScope.roleNo eq 4 }" >
+      <span class="arrow">▼</span>
+       
+      
+       <ul class="dropdown-menu">
+      	
+      	<li><a href="/admin/product">상품리스트</a></li>
+        <li><a href="/adminList">관리자리스트</a></li>
+        <li><a href="/userList">회원리스트</a></li>
+        <li><a href="/logOut">로그아웃</a></li>
+      
+      </ul>
+      </c:when>
+      <%--관리자 --%>
        <c:when test="${sessionScope.roleNo eq 1 }" >
       <span class="arrow">▼</span>
        
       
        <ul class="dropdown-menu">
       	
-      	<li><a href="/admin/product">상품관리</a></li>
-        <li><a href="/profile">내 정보</a></li>
-        <li><a href="/orders">주문 내역</a></li>
+      	<li><a href="/admin/product">상품리스트</a></li>
+        <li><a href="/userList">회원리스트</a></li>
         <li><a href="/logOut">로그아웃</a></li>
       
       </ul>
@@ -53,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function(){
         <li><a href="/item/register">상품등록</a></li>
         <li><a href="/orders">주문 내역</a></li>
         <li><a href="/logOut">로그아웃</a></li>
-       
+       </ul>
        </c:when>
        
         <c:when test="${sessionScope.roleNo eq 3 }">
@@ -64,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function(){
           <li><a href="/profile"></a></li>
         <li><a href="/orders">주문 내역</a></li>
         <li><a href="/logOut">로그아웃</a></li>
-       
+       </ul>
        </c:when>
       </c:choose>
       

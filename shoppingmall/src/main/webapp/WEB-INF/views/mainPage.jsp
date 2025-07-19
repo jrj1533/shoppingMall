@@ -123,8 +123,6 @@
   <c:if test="${sessionScope.roleNo != null and sessionScope.roleNo != 0}">
   <jsp:include page="/WEB-INF/views/common/header_member.jsp" flush="true"/>
   </c:if>
-	
-  
 
   <div class="search-results">s
     <%-- 1) 왼쪽: 필터 패널 --%>
