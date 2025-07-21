@@ -26,6 +26,13 @@ public class Page {
 	//[장정수] 관리자 배송리스트
 	private String seller;
 	
+	//[장지영] 쿠폰 리스트(관리자)
+	private String couponTitle;
+	private String couponContent;
+	private String couponType;
+	private int couponAmount;
+	private int couponPercentage;
+	
 	//[장정수] 필터링 추가 페이징
 	public Page(int rowPerPage, int currentPage, String buyer, String deliveryStatus, String ordersStatus, String username) {
 		this.rowPerPage = rowPerPage;
@@ -51,7 +58,23 @@ public class Page {
 		this.rowPerPage = rowPerPage;
 		this.currentPage = currentPage;
 		this.beginRow = (currentPage-1)*rowPerPage;
-		
 	}
+	
+	//[장지영] 쿠폰리스트[관리자]
+
+
+	public Page(int rowPerPage, int currentPage, String searchWord, String couponTitle,
+			String couponContent, String couponType, int couponAmount, int couponPercentage) {
+		this.beginRow = (currentPage - 1) * rowPerPage;
+		this.rowPerPage = rowPerPage;
+		this.currentPage = currentPage;
+		this.searchWord = searchWord;
+		this.couponTitle = couponTitle;
+		this.couponContent = couponContent;
+		this.couponType = couponType;
+		this.couponAmount = couponAmount;
+		this.couponPercentage = couponPercentage;
+	}
+
 	
 }

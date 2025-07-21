@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', function(){
       	<li><a href="/admin/deliveryList">배송조회</a></li>
         <li><a href="/admin/adminList">관리자리스트</a></li>
         <li><a href="/userList">회원리스트</a></li>
+        <li><a href="/admin/couponList">쿠폰리스트</a></li>
         <li><a href="/logOut">로그아웃</a></li>
       
       </ul>
@@ -68,6 +69,7 @@ document.addEventListener('DOMContentLoaded', function(){
       	<li><a href="/admin/product">상품리스트</a></li>
       	<li><a href="/admin/deliveryList">배송조회</a></li>
         <li><a href="/userList">회원리스트</a></li>
+        <li><a href="/admin/couponList">쿠폰리스트</a></li>
         <li><a href="/logOut">로그아웃</a></li>
       
       </ul>

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!DOCTYPE html>
 <html>
 <head>
@@ -106,9 +107,54 @@
 		background-color: #eee;
 		color: #000;
 	}
+	
+	 .header-container { max-width: 1200px; margin: 0 auto; font-family: 'Arial', sans-serif; }
+  /* auth-bar */
+  .auth-bar { text-align: right; font-size: 0.9rem; padding: 8px 0; color: #555; }
+  .auth-bar .member-menu { display: inline-block; cursor: pointer; margin: 0 4px; }
+  .auth-bar .member-menu .arrow { font-size: 0.8rem; margin-left: 2px; }
+	
+	   /* 드롭다운 공통 */
+  .member-menu {
+    position: relative;
+  }
+  .member-menu .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    list-style: none;
+    margin: 4px 0 0;
+    padding: 0;
+    min-width: 140px;
+    z-index: 100;
+  }
+  .member-menu .dropdown-menu li {
+    padding: 8px 12px;
+  }
+  .member-menu .dropdown-menu li + li {
+    border-top: 1px solid #eee;
+  }
+  .member-menu .dropdown-menu a {
+    display: block;
+    color: #333;
+    text-decoration: none;
+  }
+	/* 추가: 자식 요소(<a>)가 포커스를 가질 때도 유지 */
+  .dropdown-menu {
+	  display: block;
+	}
+  /* hover 시 보이기 */
+  .member-menu.open .dropdown-menu {
+    display: block;
+  }
 </style>
 
-<script>
+<script type="text/javascript">
 function createAdmin() {
   var adminId = $('#adminId').val();
   var password = $('#password').val();
@@ -159,12 +205,66 @@ $(document).on('click', '.delete-btn', function () {
 	    });
 	  }
 	});
+	
+document.addEventListener('DOMContentLoaded', function(){
+	const menus = document.querySelectorAll('.member-menu');
+	
+	menus.forEach(menu => {
+	    menu.addEventListener('click', e => { // 순환하면서 클릭이벤트 등록 
+	      e.stopPropagation();  //클릭이벤트가 부모요소로 전파 x 
+	
+	
+	      menus.forEach(m => {
+	        if (m !== menu) m.classList.remove('open');
+	      });
+	
+	      menu.classList.toggle('open');
+	    })
+	})
+	
+	document.addEventListener('click', ()=>{
+	  menus.forEach(m => m.classList.remove('open'));
+	});
+});
 </script>
 </head>
-
+<div class="header-container">
+  <div class="auth-bar">
+    <div class="member-menu">
+	  <c:choose>
+	    <c:when test="${sessionScope.roleNo eq 4}">
+	    	<span>통합관리자</span>
+	    </c:when>
+	    <c:when test="${sessionScope.roleNo eq 1}">
+	    	<span>관리자</span>
+	    </c:when>
+	    <c:otherwise>
+	      <span>${sessionScope.name} 님</span>
+	    </c:otherwise>
+	  </c:choose>
+	  
+	   <c:choose>
+	 	<%--통합관리자 --%>
+       <c:when test="${sessionScope.roleNo eq 4 }" >
+      <span class="arrow">▼</span>
+       
+      
+       <ul class="dropdown-menu">
+      	
+      	<li><a href="/admin/product">상품리스트</a></li>
+        <li><a href="/admin/adminList">관리자리스트</a></li>
+        <li><a href="/userList">회원리스트</a></li>
+        <li><a href="/logOut">로그아웃</a></li>
+      
+      </ul>
+      </c:when>
+      </c:choose>
+     </div>
+    </div>
+   </div>
 <body>
-
 <!-- 등록 버튼 -->
+<button onclick="location.href='/mainPage'">홈</button>
 <button onclick="$('#adminModal').show();">+ 관리자 등록</button>
 
 <!-- 모달 -->

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.shoppingmall.mapper.CouponMapper">
+	<!-- 관리자 쿠폰 전체 개수-->
+	<select id="totalCount" parameterType="com.example.shoppingmall.dto.Page" resultType="int">
+		SELECT COUNT(*)
+		FROM coupon
+		<where>
+			<if test=
+		</where>
+	</select>
+	<!-- 관리자가 보는 쿠폰리스트 -->
+	<!-- map으로 해도 되지만 dto로 반환해야 가독성도 좋고, 유지보수 용이하다 -->
+	<select id="selectCouponList" parameterType="com.example.shoppingmall.dto.Page" resultType="com.example.shoppingmall.dto.Coupon" >
+		SELECT coupon_no AS couponNo,
+			   title,
+			   content,
+			   type,
+			   amount,
+			   percentage,
+			   create_date AS createDate,
+			   start_date AS startDate,
+			   end_date AS endDate
+		FROM coupon
+
+		ORDER BY create_date DESC
+		LIMIT #{beginRow}, #{rowPerPage}
+	</select>
+
+</mapper>
