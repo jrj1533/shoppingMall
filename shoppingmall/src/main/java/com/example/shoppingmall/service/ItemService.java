@@ -42,7 +42,7 @@ public class ItemService {
 		this.itemFileMapper = itemFileMapper;
 	}
 	
-	public int insertItem(Item item) { // 옵셔 개수만큼 item 삽입
+	public int insertItem(Item item) { // item 삽입
 		if(itemMapper.insertItem(item)!= 0) {
 			return item.getItemNo();   // 아이템 번호 반환
 		}

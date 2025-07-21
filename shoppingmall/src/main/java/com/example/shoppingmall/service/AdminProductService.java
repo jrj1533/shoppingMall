@@ -3,6 +3,7 @@ package com.example.shoppingmall.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Service;
 
 import com.example.shoppingmall.mapper.AdminProductMapper;
@@ -17,7 +18,19 @@ public class AdminProductService {
 	
 	// 전체 조회 'REQUESTING' 조회
 	public List<Map<String,Object>> findRequestingItem(int beginRow, int size) {
-		return adminProductMapper.findRequestingItem(beginRow, size);
+		List<Map<String, Object>> findRequestingItem = adminProductMapper.findRequestingItem(beginRow, size);
+		for( Map<String, Object> row  :findRequestingItem) {
+		Object raw = row.get("createDate");
+		if( raw == null) continue;
+		
+		String s = raw.toString().replace("T", " ");
+	
+		row.put("createDate", s);
+			}
+		
+		return findRequestingItem;
+	
+			
 	}
 
 	//  전체 조회 'REQUESTING' 개수 조회
