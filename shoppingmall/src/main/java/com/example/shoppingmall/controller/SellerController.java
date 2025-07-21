@@ -14,8 +14,10 @@ import com.example.shoppingmall.dto.Page;
 import com.example.shoppingmall.service.SellerService;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
+@Slf4j
 public class SellerController {
 
 	@Autowired SellerService sellerService;
@@ -38,7 +40,7 @@ public class SellerController {
 		List<Map<String, Object>> orderList = sellerService.orderList(paging.getBeginRow(), size, username
 				, buyer, deliveryStatus, ordersStatus);
 		
-		// System.out.println("username:" + username);
+		// log.info("username:" + username);
 		model.addAttribute("username", session.getAttribute("username"));
 		model.addAttribute("buyer", buyer);
 		model.addAttribute("deliveryStatus", deliveryStatus);

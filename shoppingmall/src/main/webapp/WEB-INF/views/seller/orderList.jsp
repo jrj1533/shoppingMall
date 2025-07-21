@@ -178,7 +178,7 @@
 			<th>결제금액</th>
 			<th>주문자</th>
 			<th>배송주소</th>
-			<th>배송현황</th>
+			<th>배송현황(구매확정)</th>
 			<th>결제상태</th>
 			<th>주문일</th>
 		</tr>
@@ -200,7 +200,7 @@
 		                    <c:choose>
 		                        <c:when test="${list.deliveryStatus == 'BEFORE'}"><button type="button" onclick="startDelivery('${list.deliveryNo}', '${list.orderNo}')">배송하기</button></c:when>
 		                        <c:when test="${list.deliveryStatus == 'CURRENT'}">배송중</c:when>
-		                        <c:when test="${list.deliveryStatus == 'FINISH'}">배송완료</c:when>
+		                        <c:when test="${list.deliveryStatus == 'FINISH'}">배송완료(${list.point})</c:when>
 		                        <c:when test="${list.deliveryStatus == 'CANCEL'}">취소 <button>내역확인</button></c:when>
 		                        <c:otherwise>알수없음</c:otherwise>
 		                    </c:choose>

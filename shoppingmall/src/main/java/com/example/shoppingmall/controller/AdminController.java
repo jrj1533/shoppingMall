@@ -13,7 +13,10 @@ import com.example.shoppingmall.dto.Admin;
 import com.example.shoppingmall.dto.Page;
 import com.example.shoppingmall.service.AdminService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
+@Slf4j
 public class AdminController {
 	
 	@Autowired AdminService adminService;

@@ -32,7 +32,8 @@
 				oc.order_date AS orderDate,
 				d.start_date AS startDate,
 				d.end_date AS endDate,
-				d.cancel_date AS cancelDate
+				d.cancel_date AS cancelDate,
+				d.point_processed AS point
 		FROM delivery d
 		INNER JOIN orders o ON d.order_no = o.order_no
 		INNER JOIN order_cart oc ON o.order_no = oc.order_no

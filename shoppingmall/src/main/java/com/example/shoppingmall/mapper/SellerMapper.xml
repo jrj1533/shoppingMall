@@ -20,7 +20,8 @@
 		    a.address2 AS address2,
 		    a.post_code AS postCode,
 		    d.delivery_no AS deliveryNo,
-		    o.order_no AS orderNo
+		    o.order_no AS orderNo,
+		    d.point_processed AS point
 		FROM order_cart oc
 		INNER JOIN item i ON oc.item_no = i.item_no
 		INNER JOIN user u ON i.username = u.username 

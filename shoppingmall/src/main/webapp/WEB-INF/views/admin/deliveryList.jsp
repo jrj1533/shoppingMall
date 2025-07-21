@@ -171,7 +171,7 @@
 			<th>판매자</th>
 			<th>상품명</th>
 			<th>구매자아이디(이름)</th>
-			<th>배송상태</th>
+			<th>배송상태(구매확정)</th>
 			<th>주문일시</th>
 			<th>배송시작일</th>
 			<th>배송완료일</th>
@@ -189,7 +189,7 @@
 					<c:choose>
 						<c:when test="${list.deliveryStatus == 'BREFORE'}">배송준비중</c:when>
 						<c:when test="${list.deliveryStatus == 'CURRENT'}">배송중</c:when>
-						<c:when test="${list.deliveryStatus == 'FINISH'}">배송완료</c:when>
+						<c:when test="${list.deliveryStatus == 'FINISH'}">배송완료(${list.point})</c:when>
 						<c:when test="${list.deliveryStatus == 'CENCEL'}">취소</c:when>
 					</c:choose>
 				</td>
