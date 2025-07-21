@@ -86,7 +86,7 @@
 	<!-- 배송상태 완료처리(스케쥴러) -->
 	<update id="deliveryChangeToFinish">
 		UPDATE delivery SET status = 'finish', end_date = NOW()
-		where status = 'CURRENT'
+		WHERE status = 'CURRENT'
 		and start_date &lt; DATE_SUB(NOW(), INTERVAL 3 DAY)
 	</update>
 	

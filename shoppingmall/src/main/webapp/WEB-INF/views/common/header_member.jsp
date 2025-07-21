@@ -51,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function(){
        <ul class="dropdown-menu">
       	
       	<li><a href="/admin/product">상품리스트</a></li>
+      	<li><a href="/admin/deliveryList">배송조회</a></li>
         <li><a href="/admin/adminList">관리자리스트</a></li>
         <li><a href="/userList">회원리스트</a></li>
         <li><a href="/logOut">로그아웃</a></li>
@@ -65,6 +66,7 @@ document.addEventListener('DOMContentLoaded', function(){
        <ul class="dropdown-menu">
       	
       	<li><a href="/admin/product">상품리스트</a></li>
+      	<li><a href="/admin/deliveryList">배송조회</a></li>
         <li><a href="/userList">회원리스트</a></li>
         <li><a href="/logOut">로그아웃</a></li>
       
@@ -76,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function(){
         <ul class="dropdown-menu">
         
         <li><a href="/item/register">상품등록</a></li>
-        <li><a href="/orders">주문 내역</a></li>
+        <li><a href="/seller/orderList">주문 내역</a></li>
         <li><a href="/logOut">로그아웃</a></li>
        </ul>
        </c:when>
