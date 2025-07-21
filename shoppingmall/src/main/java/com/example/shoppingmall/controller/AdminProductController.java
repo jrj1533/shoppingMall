@@ -40,8 +40,9 @@ public class AdminProductController {
 	    Page paging    = new Page(size, page);
 	    int beginRow   = paging.getBeginRow();
 	    List<Map<String,Object>> requestingItem =
-	        adminProductService.findRequestingItem(beginRow, size);
-
+	    adminProductService.findRequestingItem(beginRow, size);
+	    
+	    
 	    // 4) 모델에 담아서 JSP로 전달
 	    model.addAttribute("requestingItem", requestingItem);
 	    model.addAttribute("currentPage",   page);

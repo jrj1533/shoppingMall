@@ -78,7 +78,7 @@
             <td>${item.category}</td>
             <td>${item.itemTitle}</td>
             <td>${item.createDate}</td>
-            <td><button>승인</button> <button>거절</button></td>
+            <td><button id="approveButton">승인</button> <button id="rejectButton">거절</button></td>
           </tr>
           </c:forEach>
         </tbody>
@@ -135,7 +135,6 @@
 
   buttons.forEach(function(btn) {
     btn.addEventListener('click', function() {
-      prevView = document.querySelector('nav button.active').dataset.view;
       buttons.forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
       document.querySelectorAll('main section').forEach(function(sec) { sec.classList.add('hidden'); });
