@@ -38,6 +38,18 @@ public class AdminProductService {
 		return adminProductMapper.totalfindRequestingItem();
 	}
 
+	
+	// 승인 상태로 변환
+	public void approveItem(int itemNo) {
+		adminProductMapper.approveItem(itemNo);
+		
+	}
+
+	public void notApproveItem(int itemNo) {
+		adminProductMapper.notApproveItem(itemNo);
+		
+	}
+
 
 	
 	

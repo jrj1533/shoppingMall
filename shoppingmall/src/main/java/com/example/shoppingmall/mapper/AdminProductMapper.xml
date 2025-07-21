@@ -9,4 +9,14 @@
 	<select id="totalfindRequestingItem">
 		SELECT COUNT(*) from item WHERE status = 'REQUESTING';
 	</select>
+	
+	<update id="approveItem" parameterType="int" > 
+		UPDATE item SET status = 'APPROVAL' 
+		WHERE item_no = #{itemNo}
+	</update>
+	
+	<update id="notApproveItem" parameterType="int">
+		UPDATE item SET status = 'NOTAPPROVED' 
+		WHERE item_no = #{itemNo}
+	</update>
 </mapper>

@@ -5,6 +5,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <title>간단 상품관리</title>
   <style>
     body { margin:0; font-family:Arial,sans-serif; background:#f5f5f5; }
@@ -78,7 +79,17 @@
             <td>${item.category}</td>
             <td>${item.itemTitle}</td>
             <td>${item.createDate}</td>
-            <td><button id="approveButton">승인</button> <button id="rejectButton">거절</button></td>
+            <td><button type="button"
+                class="approve-btn"
+                data-item-no="${item.itemNo}">
+		          승인
+		        </button>
+		        <button type="button"
+		                class="reject-btn"
+		                data-item-no="${item.itemNo}">
+		         거절
+		        </button>
+         </td>
           </tr>
           </c:forEach>
         </tbody>
@@ -142,10 +153,53 @@
     });
   });
 
+
+  
   backBtn.addEventListener('click', function() {
     window.location.href = '/mainPage';
   });
 </script>
 
+<script type="text/javascript">
+$(document).on('click', '.approve-btn', function() {
+    const itemNo = $(this).data('item-no');
+    const view = $('nav button.active').data('view');
+    $.ajax({
+      url: '/items/approve',
+      type: 'POST',
+      data: { itemNo: itemNo,
+    	  	  view : view },
+      success: function(res) {
+        alert('승인 완료');
+        // 원하는 동작: 해당 행 제거 또는 전체 리로드
+        window.location.href= window.location.pathname + '?view=' +res;
+      },
+      error: function(xhr, status, err) {
+        console.error(xhr.responseText);
+        alert('승인 실패');
+      }
+    });
+  });
+
+
+$(document).on('click', '.reject-btn', function() {
+	const itemNo = $(this).data('item-no');
+	const view = $('nav button.active').data('view');
+	  $.ajax({
+		    url: '/items/notapprove',
+		    type: 'POST',
+		    data: { itemNo: itemNo, view: view },
+		    success: function(res){
+		      alert('상품 미승인 완료');
+		      window.location.href = window.location.pathname + '?view=' + res;
+		    },
+		    error: function(xhr, status, errorThrown){
+		      const msg = xhr.responseJSON?.message || errorThrown;
+		      alert('상품 미승인 실패: ' + msg);
+		    }
+		  });
+		});
+
+</script>
 </body>
 </html>

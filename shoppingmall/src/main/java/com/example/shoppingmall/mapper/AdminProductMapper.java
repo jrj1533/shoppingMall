@@ -13,4 +13,8 @@ public interface AdminProductMapper {
 
 	int totalfindRequestingItem();  // 전체 갯수 조회
 
+	void approveItem(int itemNo); // 승인상태로 업데이트
+
+	void notApproveItem(int itemNo); // 미승인 상태로 업데이트
+
 }
