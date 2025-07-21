@@ -6,15 +6,18 @@
 	<select id="totalCount" resultType="int" parameterType="com.example.shoppingmall.dto.Page">
 		SELECT COUNT(*)
 		FROM delivery d
-		inner join orders o
+		inner join orders o on d.order_no = o.order_no
+		INNER JOIN order_cart oc ON o.order_no = oc.order_no
+		INNER JOIN item i ON oc.item_no = i.item_no
 		<where>
 			<if test="seller != null and seller != ''">
-				AND o.username LIKE CONCAT('%', #{seller}, '%')
+				AND i.username LIKE CONCAT('%', #{seller}, '%')
 			</if>
 			
 			<if test="buyer != null and buyer != ''">
 				AND o.username LIKE CONCAT('%', #{buyer}, '%')
 			</if>
+		AND oc.order_date IS NOT null
 		</where>
 	</select>
 	
@@ -43,7 +46,7 @@
 			<if test="buyer != null and buyer != ''">
 				AND o.username LIKE CONCAT('%', #{buyer}, '%')
 			</if>
-			oc.order_date IS NOT null
+			AND oc.order_date IS NOT null
 		</where>
 		ORDER BY oc.order_date DESC
 		LIMIT #{beginRow}, #{size}

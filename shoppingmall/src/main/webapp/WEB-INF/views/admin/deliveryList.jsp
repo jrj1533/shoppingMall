@@ -8,6 +8,97 @@
 <title>배송 조회</title>
 
 <style>
+	body {
+		font-family: 'Noto Sans KR', sans-serif;
+		background-color: #f9f9f9;
+		color: #333;
+		padding: 20px;
+	}
+	
+	h1 {
+		text-align: center;
+		margin-bottom: 30px;
+		color: #2c3e50;
+	}
+	
+	/* 검색 폼 스타일 */
+	form {
+		display: flex;
+		gap: 10px;
+		justify-content: center;
+		flex-wrap: wrap;
+		margin-bottom: 20px;
+	}
+	
+	form input[type="text"] {
+		padding: 6px 10px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+	}
+	
+	form button {
+		padding: 6px 16px;
+		background-color: #4CAF50;
+		color: white;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+		transition: background-color 0.3s;
+	}
+	
+	form button:hover {
+		background-color: #45a049;
+	}
+	
+	/* 테이블 스타일 */
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		background-color: #fff;
+		box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+		table-layout: fixed;
+	}
+	
+	th, td {
+		padding: 10px 8px;
+		border: 1px solid #ddd;
+		text-align: center;
+		word-break: break-word;
+	}
+	
+	th {
+		background-color: #f2f2f2;
+		color: #333;
+	}
+	
+	tr:nth-child(even) {
+		background-color: #f9f9f9;
+	}
+	
+	tr:hover {
+		background-color: #eef;
+	}
+	
+	/* 배송 상태 강조 */
+	td {
+		font-size: 14px;
+	}
+	
+	td button {
+		padding: 4px 10px;
+		border: none;
+		border-radius: 4px;
+		background-color: #3498db;
+		color: white;
+		cursor: pointer;
+		transition: background-color 0.2s;
+	}
+	
+	td button:hover {
+		background-color: #2980b9;
+	}
+	
+	/* 페이징 (이미 정의됨) 추가 마무리 */
 	.paging {
 		text-align: center;
 		margin-top: 30px;
@@ -43,8 +134,23 @@
 		cursor: default;
 		border-color: #4CAF50;
 	}
-
 	
+	/* 반응형 */
+	@media screen and (max-width: 768px) {
+		form {
+			flex-direction: column;
+			align-items: center;
+		}
+		
+		table {
+			font-size: 12px;
+		}
+		
+		th, td {
+			padding: 6px 4px;
+		}
+	}
+
 </style>
 </head>
 <body>
