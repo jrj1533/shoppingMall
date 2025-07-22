@@ -138,6 +138,13 @@ document.addEventListener('DOMContentLoaded', function(){
       
     </div>
   </div>
+  
+  <div class="coupon-banner">
+  🎁 <strong>지금 접속하면! 첫 구매 2,000원 쿠폰 즉시 지급</strong>
+  <form action="/coupon/claim" method="post" style="display:inline;">
+    <button type="submit">쿠폰 받기</button>
+  </form>
+</div>
 
   <div class="sub-nav">
     <button class="btn-category">
@@ -231,4 +238,26 @@ document.addEventListener('DOMContentLoaded', function(){
   .member-menu.open .dropdown-menu {
     display: block;
   }
+  /* 쿠폰 베너*/
+   .coupon-banner {
+    margin: 20px auto;
+    padding: 12px 20px;
+    background: linear-gradient(to right, #ffb347, #ffcc33);
+    color: #000;
+    font-size: 16px;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  .coupon-banner button {
+    background-color: #7f00ff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    margin-left: 10px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
 </style>

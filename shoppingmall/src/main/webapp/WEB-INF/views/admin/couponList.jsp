@@ -131,13 +131,30 @@
   align-items: center;
   gap: 10px;
 }
+/* 쿠폰 만료되면 줄그어지면서 회색처리*/
+ .expired-row {
+    background-color: #f5f5f5;
+    color: gray;
+    text-decoration: line-through;
+  }
+/* 쿠폰 삭제되면 줄그어지면서 회색처리*/
+  .deleted-row {
+    background-color: #f0dada;
+    color: darkred;
+    text-decoration: line-through;
+    font-weight: bold;
+  }
   
 </style>
 <script type="text/javascript">
+// 쿠폰타입에 맞게 선택시 입력창을 보여주기 위해 toggleDiscountInputs() 함수 호출
 document.addEventListener('DOMContentLoaded', function () {
 	  toggleDiscountInputs(); // 초기 로딩 시 상태 반영
 	});
+	// 등록버튼 클릭 함수
 function createCoupon() {
+	// 입력 폼에서 값을 가져오기
+	// 숫자는 parseInt()로 변환하고 값이 없으면 0으로 처리
 	  const title = $('#title').val();
 	  const content = $('#content').val();
 	  const type = $('#type').val();
@@ -170,9 +187,12 @@ function createCoupon() {
 	  });
 	}
 	
+	// 위에서 선언한 toggleDiscountInput() 호출
 function toggleDiscountInputs() {
 	  const type = document.getElementById('type').value;
 
+	  // select에서 할인 타입(퍼센트,금액) 선택하면 그에 따라 입력칸이 'block', 'none' 으로 보여주거나 안보여주기
+	  // 아무것도 선택 안할 시 둘다 숨김
 	  if (type === 'PERCENT') {
 	    document.getElementById('percentageInput').style.display = 'block';
 	    document.getElementById('amountInput').style.display = 'none';
@@ -267,13 +287,18 @@ function toggleDiscountInputs() {
         <th>할인</th>
         <th>시작일</th>
         <th>만료일</th>
+        <th>상태</th>
         <th>생성일</th>
     </tr>
     
     <c:choose>
         <c:when test="${not empty couponList}">
             <c:forEach var="c" items="${couponList}">
-                <tr>
+                   <tr class="<c:choose>
+		               <c:when test='${c.status == "EXPIRED"}'>expired-row</c:when>
+		               <c:when test='${c.status == "DELETED"}'>deleted-row</c:when>
+		               <c:otherwise></c:otherwise>
+		             </c:choose>">
                     <td>${c.couponNo}</td>
                     <td>${c.title}</td>
                     <td>${c.content}</td>
@@ -281,12 +306,29 @@ function toggleDiscountInputs() {
                         <c:choose>
                             <c:when test="${c.type == 'PERCENT'}">${c.percentage}%</c:when>
                             <c:otherwise>
+                            <!-- 숫자에 천단위로 , 표시 -->
                             <fmt:formatNumber value="${c.amount}" type="number" groupingUsed="true" />원
                             </c:otherwise>
                         </c:choose>
                     </td>
                     <td>${c.startDate}</td>
                     <td>${c.endDate}</td>
+                    <td>
+                      <c:choose>
+			            <c:when test="${c.status == 'ACTIVE'}">
+					      <form method="post" action="/admin/updateDeleteCoupons"
+					            onsubmit="return confirm('정말 삭제하시겠습니까?');"
+					            style="display:inline;">
+					        <input type="hidden" name="couponNo" value="${c.couponNo}" />
+					        <button type="submit" style="border:none; background:none; color:green; cursor:pointer;">
+					          사용 가능
+					        </button>
+					      </form>
+					    </c:when>
+			            <c:when test="${c.status == 'EXPIRED'}">만료</c:when>
+			            <c:when test="${c.status == 'DELETED'}">삭제</c:when>
+			          </c:choose>
+                    </td>
                     <td>${c.createDate}</td>
                 </tr>
             </c:forEach>

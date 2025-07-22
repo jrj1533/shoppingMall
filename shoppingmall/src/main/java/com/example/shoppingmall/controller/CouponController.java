@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.shoppingmall.dto.Coupon;
 import com.example.shoppingmall.dto.Page;
@@ -91,8 +93,18 @@ public class CouponController {
 			 System.out.println("couponAmount: " + page.getCouponAmount());
 			return "admin/couponList";
 			
-			
-		
+	}
+	
+	// 관리자가 쿠폰 삭제 (논리적 삭제)
+	@PostMapping("/admin/updateDeleteCoupons")
+	public String updateDeleteCoupons(@RequestParam("couponNo") int couponNo, RedirectAttributes ra) {
+		int result = couponService.updateDeleteCoupons(couponNo);
+		if(result > 0) {
+			ra.addFlashAttribute("message", "쿠폰이 삭제되었습니다.");
+		} else {
+			ra.addFlashAttribute("error", "삭제 실패 또는 이미 삭제됨");
+		}
+		return "redirect:/admin/couponList";
 	}
 	
 }

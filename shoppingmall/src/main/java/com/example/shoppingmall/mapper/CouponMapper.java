@@ -19,4 +19,11 @@ public interface CouponMapper {
 	// 쿠폰 등록
 	int insertCoupon(Coupon coupon);
 
+	// 쿠폰 스케줄 만료처리
+	int updateExpiredCoupons();
+
+	// 관리자 쿠폰삭제
+	int updateDeleteCoupons(int couponNo);
+
+
 }

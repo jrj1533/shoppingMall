@@ -58,6 +58,7 @@
 			   percentage,
 			   create_date AS createDate,
 			   start_date AS startDate,
+			   status,
 			   end_date AS endDate
 		FROM coupon
 		<where>
@@ -95,7 +96,7 @@
 		LIMIT #{beginRow}, #{rowPerPage}
 	</select>
 
-	<!-- 쿠폰 입력 -->
+	<!-- 쿠폰 등록 -->
 	<insert id="insertCoupon" parameterType="com.example.shoppingmall.dto.Coupon">
 		INSERT INTO coupon (
 							title,
@@ -115,6 +116,22 @@
 							#{endDate}
 							)
 	</insert>
+	
+	<!-- 쿠폰 스케줄러 만료처리 -->
+	<update id="updateExpiredCoupons">
+		UPDATE coupon
+		SET status = 'EXPIRED'
+		WHERE end_date &lt; NOW()
+		AND status = 'ACTIVE'
+	</update>
+
+	<!-- 쿠폰 관리자 삭제처리 -->
+	<update id="updateDeleteCoupons" parameterType="int">
+		UPDATE coupon
+		SET status = 'DELETED'
+		WHERE coupon_no = #{couponNo}
+		AND status = 'ACTIVE'
+	</update>
 
 
 </mapper>

@@ -12,5 +12,6 @@ public class Coupon {
 	private int percentage;
 	private String createDate;
 	private String startDate;
+	private String status;
 	private String endDate;
 }

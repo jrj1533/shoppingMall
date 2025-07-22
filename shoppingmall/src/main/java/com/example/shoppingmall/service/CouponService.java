@@ -32,4 +32,14 @@ public class CouponService {
 	public int insertCoupon(Coupon coupon) {
 		return couponMapper.insertCoupon(coupon);
 	}
+
+	// 쿠폰 스케줄러 만료처리
+	public int expireOldCoupons() {
+		return couponMapper.updateExpiredCoupons();
+	}
+	
+	// 관리자 쿠폰 삭제
+	public int updateDeleteCoupons(int couponNo) {
+		return couponMapper.updateDeleteCoupons(couponNo);
+	}
 }
