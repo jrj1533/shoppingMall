@@ -15,5 +15,8 @@ public interface CouponMapper {
 	
 	// 쿠폰리스트 전체개수
 	int totalCount(Page page);
+	
+	// 쿠폰 등록
+	int insertCoupon(Coupon coupon);
 
 }

@@ -27,4 +27,9 @@ public class CouponService {
 	public List<Coupon> getCouponList(Page page) {
 		return couponMapper.selectCouponList(page);
 	}
+	
+	// 쿠폰 등록
+	public int insertCoupon(Coupon coupon) {
+		return couponMapper.insertCoupon(coupon);
+	}
 }

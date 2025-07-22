@@ -33,7 +33,7 @@ public class Page {
 	private int couponAmount;
 	private int couponPercentage;
 	
-	// 검색, 페이징 공통
+	// 검색, 페이징 공통 (기본생성자를 명시해줘서 다른 클래스에서 사용 가능
 	public Page() {
 	
 	}

@@ -1,37 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.shoppingmall.mapper.CouponMapper">
+
+<!--  동적쿼리 쓴 이유 컨트롤단에서 조건분기 하지않고 나중에 추가하거나 수정할경우 동적쿼리만 수정이 용이하기 때문 -->
 	<!-- 관리자 쿠폰 전체 개수-->
 	<select id="totalCount" parameterType="com.example.shoppingmall.dto.Page" resultType="int">
 		SELECT COUNT(*)
 		FROM coupon
-		  <where>
-    <!-- 통합 검색 -->
-	    <if test="searchWord != null and searchWord != ''">
-	      AND (
-	        title LIKE CONCAT('%', #{searchWord}, '%') 
-	        OR content LIKE CONCAT('%', #{searchWord}, '%') 
-	        OR type LIKE CONCAT('%', #{searchWord}, '%')
-	      )
-	    </if>
-	
-	    <!-- 개별 조건 검색 -->
-	    <if test="couponTitle != null and couponTitle != ''">
-	      AND title LIKE CONCAT('%', #{couponTitle}, '%')
-	    </if>
-	    <if test="couponContent != null and couponContent != ''">
-	      AND content LIKE CONCAT('%', #{couponContent}, '%')
-	    </if>
-	    <if test="couponType != null and couponType != ''">
-	      AND type = #{couponType}
-	    </if>
-	    <if test="couponAmount != null and couponAmount != 0">
-	      AND amount = #{couponAmount}
-	    </if>
-	    <if test="couponPercentage != null and couponPercentage != 0">
-	      AND percentage = #{couponPercentage}
-	    </if>
-	  </where>
+		<where>
+		<!-- 검색타입이 null이 아니고 검색어가 null이 아니고 검색어를 입력했을 경우  -->
+			<if test="searchType != null and searchWord != null and searchWord != ''">
+			  <choose>
+			  <!-- 검색타입이 title이면  제목으로검색 -->
+			    <when test="searchType.equals('title')">
+			      AND title LIKE CONCAT('%', #{searchWord}, '%')
+			    </when>
+			  <!-- 검색타입이 content이면  내용으로검색 -->
+			    <when test="searchType.equals('content')">
+			      AND content LIKE CONCAT('%', #{searchWord}, '%')
+			    </when>
+			  <!-- 검색타입이 all이면  제목+내용으로검색 -->
+			    <when test="searchType.equals('all')">
+			      AND (title LIKE CONCAT('%', #{searchWord}, '%') OR content LIKE CONCAT('%', #{searchWord}, '%'))
+			    </when>
+			  </choose>
+			</if>
+				
+			<!-- 할인율 필터: 숫자 있을 때만 percentage까지 필터 -->
+			<!--  쿠폰타입이 null이 아니거나 퍼센트타입 선택 시 퍼센트만 보여줌 -->
+			<if test="couponType != null and couponType.equals('PERCENT')">
+			  AND type = 'PERCENT'
+			  <!--  입력된 값이 0값을 입력하지 않았을경우 필터 적용 -->
+			  <if test="couponPercentage != null and couponPercentage != 0">
+			    AND percentage = #{couponPercentage}
+			  </if>
+			</if>
+			
+			<!-- 금액 필터: 숫자 있을 때만 amount까지 필터 -->
+			<!--  쿠폰타입이 null이 아니거나 금액필터를 선택 시 금액만 보여줌 -->
+			<if test="couponType != null and couponType.equals('AMOUNT')">
+			  AND type = 'AMOUNT'
+			  <!-- 입력된 값이 0값을 입력하지 않았을경우 필터 적용 -->
+			  <if test="couponAmount != null and couponAmount != 0">
+			    AND amount = #{couponAmount}
+			  </if>
+			</if>
+		</where>
 		</select>
 	<!-- 관리자가 보는 쿠폰리스트 -->
 	<!-- map으로 해도 되지만 dto로 반환해야 가독성도 좋고, 유지보수 용이하다 -->
@@ -46,35 +60,61 @@
 			   start_date AS startDate,
 			   end_date AS endDate
 		FROM coupon
-		  <where>
-		    <!-- 통합 검색 -->
-		    <if test="searchWord != null and searchWord != ''">
-		      AND (
-		        title LIKE CONCAT('%', #{searchWord}, '%') 
-		        OR content LIKE CONCAT('%', #{searchWord}, '%') 
-		        OR type LIKE CONCAT('%', #{searchWord}, '%')
-		      )
-		    </if>
-		
-		    <!-- 개별 조건 검색 -->
-		    <if test="couponTitle != null and couponTitle != ''">
-		      AND title LIKE CONCAT('%', #{couponTitle}, '%')
-		    </if>
-		    <if test="couponContent != null and couponContent != ''">
-		      AND content LIKE CONCAT('%', #{couponContent}, '%')
-		    </if>
-		    <if test="couponType != null and couponType != ''">
-		      AND type = #{couponType}
-		    </if>
-		    <if test="couponAmount != null and couponAmount != 0">
-		      AND amount = #{couponAmount}
-		    </if>
-		    <if test="couponPercentage != null and couponPercentage != 0">
-		      AND percentage = #{couponPercentage}
-		    </if>
-		  </where>
+		<where>
+			<if test="searchType != null and searchWord != null and searchWord != ''">
+			  <choose>
+			    <when test="searchType.equals('title')">
+			      AND title LIKE CONCAT('%', #{searchWord}, '%')
+			    </when>
+			    <when test="searchType.equals('content')">
+			      AND content LIKE CONCAT('%', #{searchWord}, '%')
+			    </when>
+			    <when test="searchType.equals('all')">
+			      AND (title LIKE CONCAT('%', #{searchWord}, '%') OR content LIKE CONCAT('%', #{searchWord}, '%'))
+			    </when>
+			  </choose>
+			</if>
+				
+			<!-- 할인율 필터: 숫자 있을 때만 percentage까지 필터 -->
+			<if test="couponType != null and couponType.equals('PERCENT')">
+			  AND type = 'PERCENT'
+			  <if test="couponPercentage != null and couponPercentage != 0">
+			    AND percentage = #{couponPercentage}
+			  </if>
+			</if>
+			
+			<!-- 금액 필터: 숫자 있을 때만 amount까지 필터 -->
+			<if test="couponType != null and couponType.equals('AMOUNT')">
+			  AND type = 'AMOUNT'
+			  <if test="couponAmount != null and couponAmount != 0">
+			    AND amount = #{couponAmount}
+			  </if>
+			</if>
+		</where>
 		ORDER BY create_date DESC
 		LIMIT #{beginRow}, #{rowPerPage}
 	</select>
+
+	<!-- 쿠폰 입력 -->
+	<insert id="insertCoupon" parameterType="com.example.shoppingmall.dto.Coupon">
+		INSERT INTO coupon (
+							title,
+							content, 
+							type, 
+							amount, 
+							percentage, 
+							start_date, 
+							end_date
+							)
+					VALUES (#{title}, 
+							#{content}, 
+							#{type}, 
+							#{amount}, 
+							#{percentage}, 
+							#{startDate}, 
+							#{endDate}
+							)
+	</insert>
+
 
 </mapper>
