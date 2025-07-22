@@ -5,10 +5,34 @@
 	<select id="totalCount" parameterType="com.example.shoppingmall.dto.Page" resultType="int">
 		SELECT COUNT(*)
 		FROM coupon
-		<where>
-			<if test=
-		</where>
-	</select>
+		  <where>
+    <!-- 통합 검색 -->
+	    <if test="searchWord != null and searchWord != ''">
+	      AND (
+	        title LIKE CONCAT('%', #{searchWord}, '%') 
+	        OR content LIKE CONCAT('%', #{searchWord}, '%') 
+	        OR type LIKE CONCAT('%', #{searchWord}, '%')
+	      )
+	    </if>
+	
+	    <!-- 개별 조건 검색 -->
+	    <if test="couponTitle != null and couponTitle != ''">
+	      AND title LIKE CONCAT('%', #{couponTitle}, '%')
+	    </if>
+	    <if test="couponContent != null and couponContent != ''">
+	      AND content LIKE CONCAT('%', #{couponContent}, '%')
+	    </if>
+	    <if test="couponType != null and couponType != ''">
+	      AND type = #{couponType}
+	    </if>
+	    <if test="couponAmount != null and couponAmount != 0">
+	      AND amount = #{couponAmount}
+	    </if>
+	    <if test="couponPercentage != null and couponPercentage != 0">
+	      AND percentage = #{couponPercentage}
+	    </if>
+	  </where>
+		</select>
 	<!-- 관리자가 보는 쿠폰리스트 -->
 	<!-- map으로 해도 되지만 dto로 반환해야 가독성도 좋고, 유지보수 용이하다 -->
 	<select id="selectCouponList" parameterType="com.example.shoppingmall.dto.Page" resultType="com.example.shoppingmall.dto.Coupon" >
@@ -22,7 +46,33 @@
 			   start_date AS startDate,
 			   end_date AS endDate
 		FROM coupon
-
+		  <where>
+		    <!-- 통합 검색 -->
+		    <if test="searchWord != null and searchWord != ''">
+		      AND (
+		        title LIKE CONCAT('%', #{searchWord}, '%') 
+		        OR content LIKE CONCAT('%', #{searchWord}, '%') 
+		        OR type LIKE CONCAT('%', #{searchWord}, '%')
+		      )
+		    </if>
+		
+		    <!-- 개별 조건 검색 -->
+		    <if test="couponTitle != null and couponTitle != ''">
+		      AND title LIKE CONCAT('%', #{couponTitle}, '%')
+		    </if>
+		    <if test="couponContent != null and couponContent != ''">
+		      AND content LIKE CONCAT('%', #{couponContent}, '%')
+		    </if>
+		    <if test="couponType != null and couponType != ''">
+		      AND type = #{couponType}
+		    </if>
+		    <if test="couponAmount != null and couponAmount != 0">
+		      AND amount = #{couponAmount}
+		    </if>
+		    <if test="couponPercentage != null and couponPercentage != 0">
+		      AND percentage = #{couponPercentage}
+		    </if>
+		  </where>
 		ORDER BY create_date DESC
 		LIMIT #{beginRow}, #{rowPerPage}
 	</select>

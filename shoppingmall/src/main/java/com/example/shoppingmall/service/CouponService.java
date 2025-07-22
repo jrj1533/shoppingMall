@@ -24,7 +24,7 @@ public class CouponService {
 	}
 	
 	// 쿠폰리스트(관리자)
-	public List<Coupon> getCouponList(int rowPerPage, int currentPage, String searchWord, String couponTitle, String couponContent, String couponType, int couponAmount, int couponPercentage) {
-		return couponMapper.selectCouponList(rowPerPage, currentPage, searchWord, couponTitle, couponContent, couponType, couponAmount, couponPercentage);
+	public List<Coupon> getCouponList(Page page) {
+		return couponMapper.selectCouponList(page);
 	}
 }

@@ -27,36 +27,23 @@ public class CouponController {
 	@GetMapping("/admin/couponList")
 	public String couponList(Model model,
 							 HttpSession session,
-							 @RequestParam(defaultValue = "1") int currentPage,
-							 @RequestParam(defaultValue = "10") int rowPerPage,
-							 @RequestParam(defaultValue = "") String searchWord,
-							 @RequestParam(defaultValue = "") String couponTitle,
-							 @RequestParam(defaultValue = "") String couponContent,
-							 @RequestParam(defaultValue = "") String couponType,
-							 @RequestParam(defaultValue = "0") int couponAmount,
-							 @RequestParam(defaultValue = "0") int couponPercentage) {
+							 Page page) {
 		
-			
-			// Dto 생성
-			Page page = new Page(rowPerPage, currentPage, searchWord, couponTitle, couponContent, couponType, couponAmount, couponPercentage);
+		
+			// 페이지 계산(page dto에서 호출)
+			page.setBeginRow();
 			
 			// 리스트 + 전체 개수
-			List<Coupon> list = couponService.getCouponList(page.getBeginRow(), rowPerPage, currentPage, searchWord, couponTitle, couponContent, couponType, couponAmount, couponPercentage);
+			List<Coupon> list = couponService.getCouponList(page);
 			int totalCount = couponService.getTotalCount(page);
+			int rowPerPage = page.getRowPerPage();
 			int lastPage = (int) Math.ceil((double) totalCount / rowPerPage);
 			
 			// 뷰에 모델에 담아서 전달
 			model.addAttribute("couponList", list);
-			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("page", page);
 			model.addAttribute("lastPage", lastPage);
-			model.addAttribute("searchWord", searchWord);
-			model.addAttribute("couponTitle", couponTitle);
-			model.addAttribute("couponContent", couponContent);
-			model.addAttribute("couponType", couponType);
-			model.addAttribute("couponAmount", couponAmount);
-			model.addAttribute("couponPercentage", couponPercentage);
-			
-			System.out.println("rowPerPage = " + rowPerPage);
+
 			System.out.println("totalCount = " + totalCount);
 			System.out.println("list:" + list.toString());
 			return "admin/couponList";

@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class Page {
-	private int rowPerPage;
-	private int currentPage;
+	private int rowPerPage = 10;
+	private int currentPage = 1;
 	private int beginRow;
 	private int totalCount;
 	private String searchWord; // 검색어
@@ -32,6 +32,11 @@ public class Page {
 	private String couponType;
 	private int couponAmount;
 	private int couponPercentage;
+	
+	// 검색, 페이징 공통
+	public Page() {
+	
+	}
 	
 	//[장정수] 필터링 추가 페이징
 	public Page(int rowPerPage, int currentPage, String buyer, String deliveryStatus, String ordersStatus, String username) {
@@ -60,21 +65,12 @@ public class Page {
 		this.beginRow = (currentPage-1)*rowPerPage;
 	}
 	
-	//[장지영] 쿠폰리스트[관리자]
-
-
-	public Page(int rowPerPage, int currentPage, String searchWord, String couponTitle,
-			String couponContent, String couponType, int couponAmount, int couponPercentage) {
+	//[장지영] page 계산
+	public void setBeginRow() {
 		this.beginRow = (currentPage - 1) * rowPerPage;
-		this.rowPerPage = rowPerPage;
-		this.currentPage = currentPage;
-		this.searchWord = searchWord;
-		this.couponTitle = couponTitle;
-		this.couponContent = couponContent;
-		this.couponType = couponType;
-		this.couponAmount = couponAmount;
-		this.couponPercentage = couponPercentage;
 	}
+	
+
 
 	
 }
