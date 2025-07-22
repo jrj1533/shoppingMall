@@ -3,10 +3,12 @@ package com.example.shoppingmall.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +17,6 @@ import com.example.shoppingmall.dto.ItemFile;
 import com.example.shoppingmall.dto.ItemOption;
 import com.example.shoppingmall.service.ItemService;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -34,9 +35,7 @@ public class ItemController {
 		List<ItemOption> opts = new ArrayList<>();
 		opts.add(new ItemOption());
 		model.addAttribute("itemOption", opts);
-		
-		
-		
+
 		
 		return "seller/productForm";
 	}
@@ -55,7 +54,6 @@ public class ItemController {
 			
 		}
 		
-		
 		  List<MultipartFile> itemFile = item.getItemFile();
 		  int num = 1; 
 		  for(MultipartFile file :itemFile){
@@ -67,10 +65,36 @@ public class ItemController {
 		  }
 		  
 		}
-		 
-		
-		
+
 		return "redirect:/mainPage";
+	}
+	
+	// 상세페이지
+	@GetMapping("/item/detail/{itemNo}")
+	public String itemDetail(Model model, @PathVariable int itemNo) {
+		
+		// item 정보가져오기
+		List<Map<String,Object>> itemInfoList = itemService.itemInfo(itemNo);
+		
+		Map<String, Object> itemInfo = null;
+		   if (itemInfoList != null && !itemInfoList.isEmpty()) {
+		       itemInfo = itemInfoList.get(0); // 첫 번째 항목만 사용
+		   }
+		//log.info("itemInfo:" + itemInfo);
+		
+		// item-file(이미지)
+		List<ItemFile> itemFile = itemService.itemImg(itemNo);
+		//log.info("itemFile:" + itemFile);
+		
+		// item-option(옵션가져오기)
+		List<ItemOption> itemOption = itemService.itemOption(itemNo);
+		//log.info("itemOption:" + itemOption);
+		
+		model.addAttribute("itemNo", itemNo);
+		model.addAttribute("itemInfo", itemInfo);
+		model.addAttribute("itemFile", itemFile);
+		model.addAttribute("itemOption", itemOption);
+		return "/seller/itemDetail";
 	}
 	
 }

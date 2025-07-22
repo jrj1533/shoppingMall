@@ -4,4 +4,39 @@
 	<insert id="insertItem" useGeneratedKeys="true" parameterType="com.example.shoppingmall.dto.Item" keyColumn="item_no" keyProperty="itemNo">
 		INSERT INTO item (category,username,item_title,item_content,item_amount) VALUES (#{item.category},#{item.username},#{item.itemTitle},#{item.itemContent},#{item.itemAmount})
 	</insert>
+	
+	<select id="itemInfo" parameterType="int" resultType="map">
+		SELECT distinct
+			i.item_no AS itemNo,
+			i.item_title AS title,
+			i.item_content AS content,
+			i.item_amount AS amount,
+			io.stock AS stock
+		FROM item i
+		INNER JOIN item_option io
+		ON i.item_no = io.item_no
+		WHERE i.item_no = #{itemNo}
+	</select>
+	
+	<select id="itemImg" parameterType="int" resultType="map">
+		SELECT 
+			file_name AS fileName,
+			file_path AS filePath,
+			save_name AS saveName,
+			file_order AS fileOrder
+		FROM item_file
+		WHERE item_no = #{itemNo}
+		ORDER BY file_order
+	</select>
+	
+	<select id="itemOption" parameterType="int" resultType="map">
+		SELECT 
+			option_no AS optionNo,
+			item_option_no AS itemOptionNo,
+			option_name AS optionName,
+			option_value AS optionValue,
+			stock AS stock
+		FROM item_option
+		WHERE item_no = #{itemNo}
+	</select>
 </mapper>

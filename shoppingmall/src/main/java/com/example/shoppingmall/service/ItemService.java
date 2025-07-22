@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.jasper.tagplugins.jstl.core.ForEach;
@@ -82,12 +83,27 @@ public class ItemService {
 		meta.setFileOrder(num);
 		
 		itemFileMapper.insertFile(meta);
-		
-		
-		
-		
 
 	}
+
+	public List<Map<String, Object>> itemDetail(int itemNo) {
+		
+		
+		return null;
+	}
+
+	public List<Map<String, Object>> itemInfo(int itemNo) {
+		return itemMapper.itemInfo(itemNo);
+	}
+
+	public List<ItemFile> itemImg(int itemNo) {
+		return itemMapper.itemImg(itemNo);
+	}
+
+	public List<ItemOption> itemOption(int itemNo) {
+		return itemMapper.itemOption(itemNo);
+	}
+
 }
 
 
