@@ -117,11 +117,14 @@ $(function(){
 function renderProducts(list) {
   const $box = $('#products').empty();
   list.forEach(p => {
-    const imgSrc = p.saveName;
+     const imgSrc = p.saveName;
+ 	 const linkUrl = '/item/detail/' + p.itemNo;
     $box.append(
       '<div class="product-card">' +
         '<div class="thumb">' +
-          '<img src="' + imgSrc + '" alt="' + p.itemTitle + '" />' +
+        	'<a href="' + linkUrl + '">' +
+         		'<img src="' + imgSrc + '" alt="' + p.itemTitle + '" />' +
+         	'</a>' +
         '</div>' +
         '<div class="info">' +
         '<button class="btn-cart" data-itemno="' + p.itemNo + '">🛒 담기</button>' +   // ← 여기! 버튼 텍스트를 문자열로
