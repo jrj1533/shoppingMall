@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function(){
     </button>
     <nav class="secondary-nav">
       <ul>
-        <li><a href="/new" class="active">신상품</a></li>
+        <li><a href="#" data-filter="new" id="filter-new" class="active">신상품</a></li>
         <li><a href="/best">베스트</a></li>
         <li><a href="/sale">알뜰쇼핑</a></li>
         <li><a href="/deal">특가/혜택</a></li>

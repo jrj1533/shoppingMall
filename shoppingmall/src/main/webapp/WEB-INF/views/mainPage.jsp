@@ -21,16 +21,16 @@
     .pagination a { margin:0 4px; text-decoration:none; color:#333; }
     .pagination a.active { font-weight:bold; color:#7f00ff; }
     .product-card { background:#fff; border:1px solid #eee; border-radius:8px;
-                    overflow:hidden; display:flex; flex-direction:column; }
-    .product-card .thumb { position:relative; width:100%; padding-top:100%; background:#f9f9f9; }
+                    overflow:hidden; display:flex; flex-direction:column;  max-height: 400px; height: auto; }
+    .product-card .thumb { position:relative; width:100%;  padding-top:80%; background:#f9f9f9; }
     .product-card .thumb img { position:absolute; top:0; left:0;
       width:100%; height:100%; object-fit:contain; }
-    .product-card .info { padding:12px; flex:1;
-      display:flex; flex-direction:column; justify-content:space-between; }
-    .product-card .name { font-size:1rem; color:#333; margin:0 0 8px;
+    .product-card .info { padding:8px; flex:1;
+      display:flex; flex-direction:column; justify-content:space-between; gap: 4px;}
+    .product-card .name { font-size:1rem; color:#333; margin:12px 0 0;
       line-height:1.3; height:2.6em; overflow:hidden; }
     .product-card .price { font-size:1.1rem; font-weight:bold; color:#333;
-      margin-bottom:12px; }
+      margin: -20px 0 8px; }
     .product-card .btn-cart { background:#7f00ff; color:#fff; border:none;
       border-radius:20px; padding:8px 0; text-align:center; font-size:.95rem;
       cursor:pointer; }
@@ -86,9 +86,12 @@ $(function(){
   let currentPage = 1;        // 현재 페이지
 
   /** 상품 목록 가져오기 & 렌더링 */
-  function loadProducts(page = 1) {
+  function loadProducts(page = 1,filterType ='') {
     currentPage = page;
-    $.getJSON(`${ctx}/api/products`, { page, size: defaultSize })
+    const params = {page, size: defaultSize};
+    if (filterType) params.filter = filterType;
+    
+    $.getJSON(`${ctx}/api/products`, params)
       .done(res => {
         console.log('API 응답 ➡️', res);
         renderProducts(res.products);
@@ -99,6 +102,17 @@ $(function(){
       });
   }
 
+  	$('#filter-new').click(function(e){
+  		e.preventDefault();
+  		
+  		$('.filter-panel a').removeClass('active');
+  		$(this).addClass('active');
+  		
+  		const f = $(this).data('filter');
+  		loadProducts(1,f);
+  	})
+  	
+  	
   /** 상품 카드 생성 */
 function renderProducts(list) {
   const $box = $('#products').empty();
@@ -110,6 +124,7 @@ function renderProducts(list) {
           '<img src="' + imgSrc + '" alt="' + p.itemTitle + '" />' +
         '</div>' +
         '<div class="info">' +
+        '<button class="btn-cart" data-itemno="' + p.itemNo + '">🛒 담기</button>' +   // ← 여기! 버튼 텍스트를 문자열로
           '<p class="name">' + p.itemTitle + '</p>' +
           '<p class="price">' + p.itemAmount.toLocaleString() + '원</p>' +
         '</div>' +
@@ -120,14 +135,8 @@ function renderProducts(list) {
 
 
 
-  /** 페이지네이션 생성 */
-  function renderPagination(startPage, endPage, currentPage) {
-    const $pg = $('#pagination').empty();
-    for (let i = startPage; i <= endPage; i++) {
-      const cls = i === currentPage ? 'active' : '';
-      $pg.append(`<a href="#" class="${cls}" data-page="${i}">${i}</a>`);
-    }
-  }
+
+
 
   /** 페이지네이션 생성 */
   function renderPagination(startPage, endPage, currentPage) {

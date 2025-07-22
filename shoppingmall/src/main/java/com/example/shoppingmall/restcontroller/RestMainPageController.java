@@ -28,13 +28,7 @@ public RestMainPageController(MainPageService mainPageService) {
 	this.mainPageService = mainPageService;
 }
 
-/*	@GetMapping("/session")
-	public Map<String,Object> getSession(HttpSession session){
-		Map<String, Object> data = new HashMap<>();
-		data.put("roleNo", session.getAttribute("roleNo"));
-		data.put("name", session.getAttribute("name"));
-		return data;
-	}*/
+
 
 @GetMapping("/products")
 public Map<String, Object> list(
@@ -70,5 +64,5 @@ public Map<String, Object> list(
   
  
   return result;
-}
+ }
 }

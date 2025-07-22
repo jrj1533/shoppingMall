@@ -42,7 +42,7 @@
     </button>
     <nav class="secondary-nav">
       <ul>
-        <li><a href="#" class="active">신상품</a></li>
+        <li><a href="#" data-filter="new" id="filter-new" class="active">신상품</a></li>
         <li><a href="#">베스트</a></li>
         <li><a href="#">알뜰쇼핑</a></li>
         <li><a href="#">특가/혜택</a></li>
