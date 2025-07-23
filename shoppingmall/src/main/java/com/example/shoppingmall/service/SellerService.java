@@ -66,7 +66,7 @@ public class SellerService {
 		// 배송완료(FINISH)랑 포인트미지급(N) 상태값의 데이터 구해오기
 		List<Map<String, Object>> finishDelivery = sellerMapper.selectFinishDelivery();
 		
-		int successCount = 0;
+		int itemConfirmAndPoint = 0;
 		
 		for(Map<String, Object> delivery : finishDelivery) {
 			String buyer = (String) delivery.get("buyer");
@@ -82,10 +82,10 @@ public class SellerService {
 			int result = sellerMapper.changPointProvessed(orderNo);
 			
 			if(result > 0) {
-				successCount ++;
+				itemConfirmAndPoint ++;
 			}
 		}
-		return successCount;
+		return itemConfirmAndPoint;
 	}
 
 }

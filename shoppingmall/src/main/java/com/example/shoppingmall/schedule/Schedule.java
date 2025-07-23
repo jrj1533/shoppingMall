@@ -45,8 +45,8 @@ public class Schedule {
 	// 배송완료 후 7일 지나면 구매 확정
 	@Scheduled(cron = "0 0 * * * ?")
 	public void itemConfirm() {
-		int itemConfirm = sellerService.deliveryChangeToConfirm();
-		System.out.println("구매 확정 처리 및 포인트 지급 건수: " + itemConfirm + "건");
+		int itemConfirmAndPoint = sellerService.deliveryChangeToConfirm();
+		System.out.println("구매 확정 처리 및 포인트 지급 건수: " + itemConfirmAndPoint + "건");
 	}
 	
 	@Scheduled(cron = "0 0 * * * *") 

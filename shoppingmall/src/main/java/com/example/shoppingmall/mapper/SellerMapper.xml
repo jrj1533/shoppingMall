@@ -107,8 +107,8 @@
 	<!-- 포인트 적립 -->
 	<update id="addPoint">
 		UPDATE user
-		SET point = point + #{point}
-		WHERE username = #{username}
+		SET user_point = user_point + #{point}
+		WHERE username = #{buyer}
 	</update>
 	
 	<!-- 포인트 지급 상태 처리 -->
