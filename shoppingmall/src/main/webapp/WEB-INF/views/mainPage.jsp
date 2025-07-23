@@ -200,12 +200,14 @@
 	  
 	<!-- 모달 오버레이 + 창 (초기엔 .hidden 처리) -->
 <!-- 오버레이 + 모달 -->
-<!-- 오버레이 + 모달 -->
-<div id="overlay" class="hidden"></div>
+
+<form id="modalForm" action="${ctx}/api/insertCart" method="post" >
+<div id==overlay" class="hidden"></div>
 <div id="detailModal" class="modal hidden">
   <div class="modal-content">
     <!-- 1) 대표 이미지 -->
     <div class="modal-thumb">
+      <input type="hidden" name="username" value="${sessionScope.username}">
       <input type="hidden"  name ="itemNo" class ="modal-itemNo" value="">
       <img id="modalImg" src="" alt="상품 이미지" />
       <!-- 이미지 URL 히든 필드 -->
@@ -232,7 +234,7 @@
         <div class="quantity-control">
           <button type="button" class="qty-decrease">-</button>
           <input type="text" class="qty-value"
-                 name="options[0].quantity"
+                 name="count"
                  value="0"
                  readonly />
           <button type="button" class="qty-increase">+</button>
@@ -248,12 +250,12 @@
 
     <!-- 5) 액션 버튼 -->
     <div class="modal-actions">
-      <button id="modalCancel">취소</button>
-      <button id="modalAddCart">장바구니 담기</button>
+      <button id="modalCancel" type="button">취소</button>
+      <button id="modalAddCart" type="button">장바구니 담기</button>
     </div>
   </div>
 </div>
-
+</form>  
 
 	
 	
@@ -262,6 +264,40 @@
 <script>
 	const ctx = '${pageContext.request.contextPath}';
 </script>
+
+<script type="text/javascript">
+$(function(){
+	  
+	  $('#modalAddCart').on('click', function(e) {
+	    e.preventDefault();
+
+	    
+	    var data = $('#modalForm').serialize();
+
+	    
+	    $.ajax({
+	      url: '/api/insertCart',
+	      type: 'POST',
+	      data: data,
+	      success: function(res) {
+	        alert(res.message);
+	        
+	        $('#overlay, #detailModal').addClass('hidden');
+	      },
+	      error: function(xhr, status, err) {
+	        console.error('장바구니 담기 실패:', err);
+	        alert(err.message);
+	        
+	       
+	      }
+	    });
+	    
+	  });
+	});
+
+</script>
+
+
 
 <script>
 $(function(){
@@ -304,9 +340,7 @@ $(function(){
 	      $('<span>').addClass('option-name')
 	                 .text(opt.optionName + ' ' + opt.optionValue),
 	      // 히든 필드
-	      $('<input>').attr({type:'hidden', name:'options['+i+'].optionNo'}).val(opt.optionNo),
-	      $('<input>').attr({type:'hidden', name:'options['+i+'].optionName'}).val(opt.optionName),
-	      $('<input>').attr({type:'hidden', name:'options['+i+'].optionValue'}).val(opt.optionValue)
+	      $('<input>').attr({type:'hidden', name:'optionNo'}).val(opt.optionNo),
 	    );
 
 	    // 수량 컨트롤
@@ -315,7 +349,7 @@ $(function(){
 	    let $val    = $('<span>').addClass('qty-value').text('0');
 	    let $qtyIn  = $('<input>').attr({
 	                     type:'hidden',
-	                     name:'options['+i+'].quantity'
+	                     name:'count'
 	                   }).val(0);
 	    let $btnInc = $('<button>').attr('type','button').addClass('qty-increase').text('+');
 
@@ -331,7 +365,7 @@ $(function(){
 	      let $li = $(this);
 	      let q   = parseInt($li.find('.qty-value').text(), 10);
 	      // 히든 수량도 동기화
-	      $li.find('input[name$=".quantity"]').val(q);
+	      $li.find('input[name="count"]').val(q);
 	      if (q > 0) {
 	        total += q * parseInt(dto.itemAmount, 10);
 	      }
@@ -349,7 +383,7 @@ $(function(){
 	  $list.on('click', '.qty-decrease', function() {
 	    let $li  = $(this).closest('li');
 	    let $val = $li.find('.qty-value');
-	    let $input = $li.find('input[name$=".quantity"]');
+	    let $input = $li.find('input[name="count"]');
 	    
 	    let cur  = parseInt($val.text(), 10);
 	    if (cur > 0) {
@@ -366,14 +400,14 @@ $(function(){
 	  $list.on('click', '.qty-increase', function() {
 	    let $li  = $(this).closest('li');
 	    let $val = $li.find('.qty-value');
-	    let $input = $li.find('input[name$=".quantity"]');
+	    let $input = $li.find('input[name="count"]');
 	    let cur  = parseInt($val.text(), 10);
 
 	    if (cur === 0) {
 	      // ① 다른 옵션 모두 0 으로 리셋
 	      $list.children('li').each(function() {
 	        $(this).find('.qty-value').text('0');
-	        $(this).find('input[name$=".quantity"]').val(0);
+	        $(this).find('input[name="count"]').val(0);
 	      });
 	      // ② 클릭된 것만 1 로
 	      $val.text('1');
