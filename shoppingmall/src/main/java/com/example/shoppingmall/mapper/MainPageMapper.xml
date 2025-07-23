@@ -23,6 +23,48 @@ WHERE i.status = 'APPROVAL'
 ORDER BY i.item_no DESC
 limit #{beginRow}, #{size};
 	
-
 </select>
+
+
+<resultMap id="productOptionDtoMap"
+           type="com.example.shoppingmall.dto.ProductOptionListDto">
+  <!-- 부모(상품) 필드 -->
+  <id     column="item_no"     property="itemNo"/>
+  <result column="item_title"  property="itemTitle"/>
+  <result column="item_amount" property="itemAmount"/>
+  <result column="save_name"   property="saveName"/>
+
+  <!-- 옵션 리스트 -->
+  <collection property="options"
+              ofType="com.example.shoppingmall.dto.ItemOption">
+    <id     column="option_no"    property="optionNo"/>
+    <result column="option_name"   property="optionName"/>
+    <result column="option_value"  property="optionValue"/>
+    <result column="stock"         property="stock"/>
+    <result column="create_date"   property="createDate"/>
+  </collection>
+</resultMap>
+
+<select id="findProductsOption"
+        parameterType="int"
+        resultMap="productOptionDtoMap">
+  SELECT
+    i.item_no       AS item_no,
+    i.item_title    AS item_title,
+    i.item_amount   AS item_amount,
+    f.save_name     AS save_name,
+    o.option_no     AS option_no,
+    o.option_name   AS option_name,
+    o.option_value  AS option_value,
+    o.stock         AS stock,
+    o.create_date   AS create_date
+  FROM item i
+  LEFT JOIN item_file   f ON i.item_no = f.item_no
+                          AND f.file_order = 1
+  LEFT JOIN item_option o ON i.item_no = o.item_no
+                          AND o.stock != 0
+  WHERE i.item_no = #{itemNo}
+</select>
+
+
 </mapper>

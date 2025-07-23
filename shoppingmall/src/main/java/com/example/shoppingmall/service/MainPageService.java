@@ -7,6 +7,7 @@ import java.util.Objects;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
+import com.example.shoppingmall.dto.ProductOptionListDto;
 import com.example.shoppingmall.mapper.MainPageMapper;
 
 @Service
@@ -35,6 +36,13 @@ public class MainPageService{
 	    }
 		 	
 		 	return list;
+	}
+
+
+	public ProductOptionListDto findProductsOption(int itemNo) {
+		return  mainPageMapper.findProductsOption(itemNo);
+		
+		
 	}
 	
 	

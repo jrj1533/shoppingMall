@@ -1,10 +1,13 @@
 package com.example.shoppingmall.restcontroller;
 
 
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.http.MediaType;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.shoppingmall.dto.Page;
+import com.example.shoppingmall.dto.ProductOptionListDto;
 import com.example.shoppingmall.service.MainPageService;
 
 import jakarta.servlet.http.HttpSession;
@@ -64,5 +68,11 @@ public Map<String, Object> list(
   
  
   return result;
+ }
+
+ @GetMapping(value = "/productsOption", produces = MediaType.APPLICATION_JSON_VALUE)
+ public ProductOptionListDto productsOption(@RequestParam int itemNo){
+	   ProductOptionListDto  list = mainPageService.findProductsOption(itemNo);
+	   return list;
  }
 }
