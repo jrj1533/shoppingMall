@@ -79,18 +79,30 @@ public class CouponController {
 			
 			// 리스트 + 전체 개수
 			List<Coupon> list = couponService.getCouponList(page);
+			int currentPage = page.getCurrentPage(); // or from param
+			int rowPerPage = page.getRowPerPage();   // 페이지당 데이터 수
 			int totalCount = couponService.getTotalCount(page);
-			int rowPerPage = page.getRowPerPage();
 			int lastPage = (int) Math.ceil((double) totalCount / rowPerPage);
+			
+			// 페이지 그룹 (5개씩 출력)
+			int groupSize = 5;
+			int startPage = ((currentPage - 1) / groupSize) * groupSize + 1;
+			int endPage = startPage + groupSize - 1;
+			if (endPage > lastPage) endPage = lastPage;
 			
 			// 뷰에 모델에 담아서 전달
 			model.addAttribute("couponList", list);
 			model.addAttribute("page", page);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("startPage", startPage);
+			model.addAttribute("endPage", endPage);
 			model.addAttribute("lastPage", lastPage);
 
+			/*
 			System.out.println("totalCount = " + totalCount);
 			System.out.println("list:" + list.toString());
 			 System.out.println("couponAmount: " + page.getCouponAmount());
+			 */
 			return "admin/couponList";
 			
 	}

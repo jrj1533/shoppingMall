@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
@@ -145,6 +145,32 @@
     font-weight: bold;
   }
   
+  .paging {
+		text-align: center;
+		margin-top: 20px;
+		user-select: none;
+	}
+	
+	.paging .page,
+	.paging .page-btn {
+		display: inline-block;
+		margin: 0 5px;
+		padding: 6px 12px;
+		color: #333;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		text-decoration: none;
+		cursor: pointer;
+	}
+	
+	.paging .page.current {
+		background-color: #4CAF50;
+		color: white;
+		font-weight: bold;
+		cursor: default;
+		border-color: #4CAF50;
+	}
+  
 </style>
 <script type="text/javascript">
 // 쿠폰타입에 맞게 선택시 입력창을 보여주기 위해 toggleDiscountInputs() 함수 호출
@@ -162,6 +188,12 @@ function createCoupon() {
 	  const percentage = parseInt($('#percentage').val()) || 0;
 	  const startDate = $('#startDate').val();
 	  const endDate = $('#endDate').val();
+	
+	  // 날짜 유효성 검사
+	  if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+	    alert('❌ 만료일은 시작일보다 빠를 수 없습니다.');
+	    return;
+	  }
 
 	  $.ajax({
 	    url: '/admin/addCoupon', 
@@ -343,29 +375,26 @@ function toggleDiscountInputs() {
 
 <!-- 페이징 영역 -->
 <div class="paging">
-    <c:if test="${page.currentPage > 1}">
-        <a class="page-btn" href="?currentPage=${page.currentPage - 1}&searchType=${page.searchType}&searchWord=${page.searchWord}&couponType=${page.couponType}">이전</a>
-    </c:if>
-
-    <c:set var="startPage" value="${(page.currentPage - 1) / 5 * 5 + 1}" />
-    <c:set var="endPage" value="${startPage + 4}" />
-    <c:if test="${endPage > lastPage}">
-        <c:set var="endPage" value="${lastPage}" />
+    <c:if test="${currentPage > 1}">
+        <a class="page-btn"
+           href="?currentPage=${currentPage - 1}&searchType=${page.searchType}&searchWord=${page.searchWord}&couponType=${page.couponType}">이전</a>
     </c:if>
 
     <c:forEach begin="${startPage}" end="${endPage}" var="i">
         <c:choose>
-            <c:when test="${i == page.currentPage}">
+            <c:when test="${i == currentPage}">
                 <span class="page current">${i}</span>
             </c:when>
             <c:otherwise>
-                <a class="page" href="?currentPage=${i}&searchType=${page.searchType}&searchWord=${page.searchWord}&couponType=${page.couponType}">${i}</a>
+                <a class="page"
+                   href="?currentPage=${i}&searchType=${page.searchType}&searchWord=${page.searchWord}&couponType=${page.couponType}">${i}</a>
             </c:otherwise>
         </c:choose>
     </c:forEach>
 
-    <c:if test="${page.currentPage < lastPage}">
-        <a class="page-btn" href="?currentPage=${page.currentPage + 1}&searchType=${page.searchType}&searchWord=${page.searchWord}&couponType=${page.couponType}">다음</a>
+    <c:if test="${currentPage < lastPage}">
+        <a class="page-btn"
+           href="?currentPage=${currentPage + 1}&searchType=${page.searchType}&searchWord=${page.searchWord}&couponType=${page.couponType}">다음</a>
     </c:if>
 </div>
 

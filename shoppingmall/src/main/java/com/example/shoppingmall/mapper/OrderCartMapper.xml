@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.shoppingmall.mapper.OrderCartMapper">
+	
+	<!-- 주문내역 리스트 -->
+	<select id="selectOrderCartList" parameterType="com.example.shoppingmall.dto.OrderCart" resultType="com.example.shoppingmall.dto.OrderCart">
+		SELECT c.order_cart_no AS orderCartNo, 
+			   i.item_title AS title, 
+			   c.count AS count, 
+			   c.price AS price, 
+			   c.status AS orderStatus, 
+			   d.status AS deliveryStatus, 
+			   c.order_date AS orderDate
+		FROM order_cart c
+		INNER JOIN orders o ON  c.order_no = o.order_no
+		INNER JOIN delivery d ON o.order_no = d.order_no
+		INNER JOIN item i ON c.item_no = i.item_no
+		<where>
+			<if test="search.title != null and search.title != ''">
+				AND i.item_title LIKE CONCAT('%', #{search.title}, '%')
+			</if>
+			
+			<if test="search.orderStatus != null and search.orderStatus != ''">
+				AND c.status = #{search.orderStatus}
+			</if>
+			
+			<if test="search.deliveryStatus != null and search.deliveryStatus != ''">
+				AND d.status = #{search.deliveryStatus}
+			</if>
+		</where>
+		ORDER BY c.order_date DESC
+		LIMIT #{page.beginRow}, #{page.rowPerPage}
+	</select>
+	
+	<!-- 주문내역 총 개수 -->
+	<select id="totalCount" parameterType="com.example.shoppingmall.dto.OrderCart" resultType="int">
+		SELECT COUNT(*)
+		FROM order_cart c
+		INNER JOIN orders o ON  c.order_no = o.order_no
+		INNER JOIN delivery d ON o.order_no = d.order_no
+		INNER JOIN item i ON c.item_no = i.item_no
+		<where>
+			<if test="search.title != null and search.title != ''">
+				AND i.item_title LIKE CONCAT('%', #{search.title}, '%')
+			</if>
+			
+			<if test="search.orderStatus != null and search.orderStatus != ''">
+				AND c.status = #{search.orderStatus}
+			</if>
+			
+			<if test="search.deliveryStatus != null and search.deliveryStatus != ''">
+				AND d.status = #{search.deliveryStatus}
+			</if>
+		</where>
+	
+	</select>
+
+</mapper>
