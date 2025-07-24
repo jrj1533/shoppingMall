@@ -1,6 +1,5 @@
 package com.example.shoppingmall.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,7 +20,6 @@ import com.example.shoppingmall.mapper.ItemMapper;
 import com.example.shoppingmall.mapper.ItemOptionMapper;
 
 import lombok.Data;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
 @Transactional
@@ -92,16 +89,14 @@ public class ItemService {
 		return null;
 	}
 
+	// 상품상세페이지 아이템 정보
 	public List<Map<String, Object>> itemInfo(int itemNo) {
 		return itemMapper.itemInfo(itemNo);
 	}
-
+	
+	// 상품상세페이지 아이템 이미지
 	public List<ItemFile> itemImg(int itemNo) {
 		return itemMapper.itemImg(itemNo);
-	}
-
-	public List<ItemOption> itemOption(int itemNo) {
-		return itemMapper.itemOption(itemNo);
 	}
 
 }

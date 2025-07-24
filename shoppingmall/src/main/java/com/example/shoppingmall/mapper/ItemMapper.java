@@ -20,6 +20,4 @@ public interface ItemMapper {
 	
 	List<ItemFile> itemImg(int itemNo);
 
-	List<ItemOption> itemOption(int itemNo);
-
 }

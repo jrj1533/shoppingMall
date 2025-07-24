@@ -28,17 +28,5 @@
 		WHERE item_no = #{itemNo}
 		ORDER BY file_order
 	</select>
-	
-	<select id="itemOption" parameterType="int" resultType="map">
-		SELECT 
-			io.option_no AS optionNo,
-			io.item_option_no AS itemOptionNo,
-			io.option_name AS optionName,
-			io.option_value AS optionValue,
-			io.stock AS stock,
-			i.item_amount AS price
-		FROM item_option io
-		INNER JOIN item i ON io.item_no = i.item_no
-		WHERE io.item_no = #{itemNo}
-	</select>
+
 </mapper>

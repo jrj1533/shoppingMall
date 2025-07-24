@@ -10,25 +10,30 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.shoppingmall.dto.Item;
 import com.example.shoppingmall.dto.ItemFile;
 import com.example.shoppingmall.dto.ItemOption;
+import com.example.shoppingmall.service.ItemOptionService;
 import com.example.shoppingmall.service.ItemService;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
+@RequestMapping("/item")
 public class ItemController {
 	private ItemService itemService;
+	private ItemOptionService itemOptionService;
 	
-	public ItemController(ItemService itemService) {
+	public ItemController(ItemService itemService, ItemOptionService itemOptionService) {
 		this.itemService = itemService;
+		this.itemOptionService = itemOptionService;
 	}
-	
-	@GetMapping("/item/register")
+
+	@GetMapping("/register")
 	public String productForm(Model model) {
 		
 		
@@ -40,7 +45,7 @@ public class ItemController {
 		return "seller/productForm";
 	}
 	
-	@PostMapping("/item/register")
+	@PostMapping("/register")
 	public String itemRegister(Item item) throws IOException {
 	
 		int itemNo = itemService.insertItem(item);
@@ -70,7 +75,7 @@ public class ItemController {
 	}
 	
 	// 상세페이지
-	@GetMapping("/item/detail/{itemNo}")
+	@GetMapping("/detail/{itemNo}")
 	public String itemDetail(Model model, @PathVariable int itemNo) {
 		
 		// item 정보가져오기
@@ -86,15 +91,15 @@ public class ItemController {
 		List<ItemFile> itemFile = itemService.itemImg(itemNo);
 		//log.info("itemFile:" + itemFile);
 		
-		// item-option(옵션가져오기)
-		List<ItemOption> itemOption = itemService.itemOption(itemNo);
-		//log.info("itemOption:" + itemOption);
+		// item option정보
+		List<ItemOption> itemOption = itemOptionService.optionsByItem(itemNo);
+		log.info("itemOption:" + itemOption);
 		
-		model.addAttribute("itemNo", itemNo);
 		model.addAttribute("itemInfo", itemInfo);
 		model.addAttribute("itemFile", itemFile);
 		model.addAttribute("itemOption", itemOption);
-		return "/seller/itemDetail";
+		
+		return "/itemDetail";
 	}
 	
 }

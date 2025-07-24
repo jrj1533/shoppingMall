@@ -10,4 +10,6 @@ public class ItemOption {
 	private String optionValue;
 	private int stock;
 	private String createDate;
+	
+	private int price;
 }

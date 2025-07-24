@@ -1,5 +1,7 @@
 package com.example.shoppingmall.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.example.shoppingmall.dto.ItemOption;
@@ -8,5 +10,8 @@ import com.example.shoppingmall.dto.ItemOption;
 public interface ItemOptionMapper {
 
 	int insertItemOption(ItemOption i);
+
+	// 상품상세페이지 옵션
+	List<ItemOption> optionsByItem(int itemNo);
 
 }
