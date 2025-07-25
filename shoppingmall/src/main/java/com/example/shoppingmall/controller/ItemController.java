@@ -92,12 +92,12 @@ public class ItemController {
 		//log.info("itemFile:" + itemFile);
 		
 		// item option정보
-		List<ItemOption> itemOption = itemOptionService.optionsByItem(itemNo);
+		// List<ItemOption> itemOption = itemOptionService.optionsByItem(itemNo);
 		// log.info("itemOption:" + itemOption);
 		
 		model.addAttribute("itemInfo", itemInfo);
 		model.addAttribute("itemFile", itemFile);
-		model.addAttribute("itemOption", itemOption);
+		// model.addAttribute("itemOption", itemOption);
 		
 		return "/itemDetail";
 	}

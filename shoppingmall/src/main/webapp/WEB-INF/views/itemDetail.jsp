@@ -252,45 +252,31 @@
                 </c:choose>
             </div>
 
-            <div class="product-info-area">
+                <div class="product-info-area">
                 <h1 class="product-title">${itemInfo.title}</h1>
                 <p class="product-desc">${itemInfo.content}</p>
 
                 <div class="option-selection-area">
-                    <c:choose>
-                        <c:when test="${not empty itemOption}">
-                            <label for="productOption">옵션 선택</label>
-                            <select id="productOption" name="selectedOption">
-                                <option value="">-- 옵션을 선택해주세요 --</option>
-                                <c:forEach var="opt" items="${itemOption}">
-                                    <option 
-                                        value="${opt.optionNo}"
-                                        data-id="${opt.optionNo}"
-                                        data-name="${opt.optionName} - ${opt.optionValue}"
-                                        data-price="${opt.price}"
-                                        data-stock="${opt.stock}">
-                                        ${opt.optionName} - ${opt.optionValue} (재고: ${opt.stock})
-                                    </option>
-                                </c:forEach>
-                            </select>
-                            
-                            <div id="selectedOptionsContainer"></div>
-                                
-                            <div id="totalSection">
-                                <div class="total-price-section">
-                                    <span>총 상품 금액:</span>
-                                    <span id="totalPrice" class="price">원</span>
-                                </div>
-                                <div class="action-buttons">
-                                    <button type="button" class="cart-btn">장바구니 담기</button>
-                                </div>
-                            </div>
-                        </c:when>
+                    <label for="productOption">옵션 선택</label>
+                    <select id="productOption" name="selectedOption">
+                        <option value="">-- 옵션을 선택해주세요 --</option>
+                    </select>
 
-                    </c:choose>
+                    <div id="selectedOptionsContainer"></div>
+
+                    <div id="totalSection">
+                        <div class="total-price-section">
+                            <span>총 상품 금액:</span>
+                            <span id="totalPrice" class="price">0원</span>
+                        </div>
+                        <div class="action-buttons">
+                            <button type="button" class="cart-btn">장바구니 담기</button>
+                        </div>
+                    </div>
                 </div>
+
             </div>
-        </div>    
+        </div>   
 
         <div class="detail-images-section">
             <h3>제품 상세 보기</h3>
@@ -309,10 +295,40 @@
     
 	<script>
 	document.addEventListener('DOMContentLoaded', function () {
+
+		const itemNo = '${itemInfo.itemNo}';
+		// console.log('itemNo:', itemNo);
+		
 		const productOptionSelect = document.getElementById('productOption');
 		const selectedOptionsContainer = document.getElementById('selectedOptionsContainer');
 		const totalPriceElement = document.getElementById('totalPrice');
 		const selectedOptionIds = new Set();
+		
+		if (!productOptionSelect) {
+	        console.error('productOption 요소가 존재하지 않습니다.');
+	        return;
+	    }
+		
+		fetch(`/api/item/detail/${itemNo}`)
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(opt => {
+                const option = document.createElement('option');
+                option.value = opt.optionNo;
+                option.dataset.id = opt.optionNo;
+                option.dataset.name = opt.optionName;
+                option.dataset.price = opt.price;
+                option.dataset.stock = opt.stock;
+                option.textContent = opt.optionName + '-' + opt.optionValue + '(재고:' + opt.stock + ')';
+
+
+                productOptionSelect.appendChild(option);
+            });
+        })
+        .catch(err => {
+            console.error('옵션 데이터를 불러오는 중 오류 발생:', err);
+            alert('옵션 정보를 불러오지 못했습니다.');
+        });
 	
 		// 옵션 선택 이벤트
 		productOptionSelect.addEventListener('change', function () {
