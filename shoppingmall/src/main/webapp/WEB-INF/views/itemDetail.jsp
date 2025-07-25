@@ -279,28 +279,18 @@
                             <div id="totalSection">
                                 <div class="total-price-section">
                                     <span>총 상품 금액:</span>
-                                    <span id="totalPrice" class="price">0원</span>
+                                    <span id="totalPrice" class="price">원</span>
                                 </div>
                                 <div class="action-buttons">
                                     <button type="button" class="cart-btn">장바구니 담기</button>
                                 </div>
                             </div>
                         </c:when>
-                        <c:otherwise>
-                            <p>이 상품은 옵션이 없습니다.</p>
-                            <div class="total-price-section">
-                                 <span>상품 금액:</span>
-                                 <span class="price"><fmt:formatNumber value="${itemInfo.amount}" type="number" groupingUsed="true"/>원</span>
-                            </div>
-                            <div class="action-buttons">
-                               <button type="button" class="cart-btn">장바구니 담기</button>
-                            </div>
-                        </c:otherwise>
+
                     </c:choose>
                 </div>
             </div>
         </div>    
-                    
 
         <div class="detail-images-section">
             <h3>제품 상세 보기</h3>
@@ -318,151 +308,156 @@
     </div>
     
 	<script>
-		document.addEventListener('DOMContentLoaded', function() {
-			const productOptionSelect = document.getElementById('productOption');
-			const selectedOptionsContainer = document.getElementById('selectedOptionsContainer');
-			const totalPriceElement = document.getElementById('totalPrice');
-			const selectedOptionIds = new Set();
+	document.addEventListener('DOMContentLoaded', function () {
+		const productOptionSelect = document.getElementById('productOption');
+		const selectedOptionsContainer = document.getElementById('selectedOptionsContainer');
+		const totalPriceElement = document.getElementById('totalPrice');
+		const selectedOptionIds = new Set();
 	
-			// 옵션 선택 이벤트
-			productOptionSelect.addEventListener('change', function() {
-				const selectedOption = this.options[this.selectedIndex];
-				if (!selectedOption.value) return;
+		// 옵션 선택 이벤트
+		productOptionSelect.addEventListener('change', function () {
+			const selectedOption = this.options[this.selectedIndex];
+			if (!selectedOption.value) return;
 	
-				const optionId = selectedOption.value;
-				const optionName = selectedOption.dataset.name;
-				const optionPrice = parseFloat(selectedOption.dataset.price);
-				const optionStock = parseInt(selectedOption.dataset.stock);
+			const optionId = selectedOption.value;
+			const optionName = selectedOption.dataset.name;
+			const optionPrice = parseInt(selectedOption.dataset.price, 10);
+			const optionStock = parseInt(selectedOption.dataset.stock, 10);
 	
-				if (selectedOptionIds.has(optionId)) {
-					alert('이미 선택된 옵션입니다.');
-					this.value = '';
-					return;
-				}
-				if (optionStock <= 0) {
-					alert('해당 옵션은 재고가 없습니다.');
-					this.value = '';
-					return;
-				}
-	
-				selectedOptionIds.add(optionId);
-	
-				// 옵션 DOM 생성
-				const optionItem = document.createElement('div');
-				optionItem.className = 'selected-option-item';
-				optionItem.dataset.optionId = optionId;
-				optionItem.dataset.price = optionPrice;
-				optionItem.dataset.stock = optionStock;
-	
-				// 옵션명
-				const optionNameSpan = document.createElement('span');
-				optionNameSpan.className = 'option-name';
-				optionNameSpan.textContent = optionName;
-				optionItem.appendChild(optionNameSpan);
-	
-				// 수량 컨트롤
-				const quantityControl = document.createElement('div');
-				quantityControl.className = 'quantity-control';
-	
-				const btnDecrease = document.createElement('button');
-				btnDecrease.type = 'button';
-				btnDecrease.className = 'decrease-btn';
-				btnDecrease.textContent = '-';
-	
-				const inputQuantity = document.createElement('input');
-				inputQuantity.type = 'text';
-				inputQuantity.className = 'quantity';
-				inputQuantity.value = 1;
-				inputQuantity.readOnly = true;
-	
-				const btnIncrease = document.createElement('button');
-				btnIncrease.type = 'button';
-				btnIncrease.className = 'increase-btn';
-				btnIncrease.textContent = '+';
-	
-				quantityControl.appendChild(btnDecrease);
-				quantityControl.appendChild(inputQuantity);
-				quantityControl.appendChild(btnIncrease);
-				optionItem.appendChild(quantityControl);
-	
-				// 개별 가격 (수량 * 단가로 계산)
-				const priceSpan = document.createElement('span');
-				priceSpan.className = 'item-price';
-				priceSpan.textContent = (optionPrice * parseInt(inputQuantity.value)).toLocaleString() + '원';
-				optionItem.appendChild(priceSpan);
-	
-				// 삭제 버튼
-				const removeBtn = document.createElement('button');
-				removeBtn.type = 'button';
-				removeBtn.className = 'remove-item-btn';
-				removeBtn.textContent = '×';
-				optionItem.appendChild(removeBtn);
-	
-				selectedOptionsContainer.appendChild(optionItem);
-				updateTotalPrice();
-	
+			if (selectedOptionIds.has(optionId)) {
+				alert('이미 선택된 옵션입니다.');
 				this.value = '';
-			});
-	
-			// 수량 변경 및 삭제 이벤트
-			selectedOptionsContainer.addEventListener('click', function(e) {
-				const target = e.target;
-				const optionItem = target.closest('.selected-option-item');
-				if (!optionItem) return;
-	
-				const quantityInput = optionItem.querySelector('.quantity');
-				let quantity = parseInt(quantityInput.value);
-				const stock = parseInt(optionItem.dataset.stock);
-				const unitPrice = parseFloat(optionItem.dataset.price);
-				const priceSpan = optionItem.querySelector('.item-price');
-	
-				if (target.classList.contains('increase-btn')) {
-					if (quantity < stock) {
-						quantity++;
-					} else {
-						alert(`최대 구매 가능 수량은 ${stock}개 입니다.`);
-					}
-				} else if (target.classList.contains('decrease-btn')) {
-					if (quantity > 1) {
-						quantity--;
-					}
-				} else if (target.classList.contains('remove-item-btn')) {
-					selectedOptionIds.delete(optionItem.dataset.optionId);
-					optionItem.remove();
-					updateTotalPrice();
-					return;
-				}
-	
-				quantityInput.value = quantity;
-	
-				// 개별 가격 업데이트
-				const totalOptionPrice = unitPrice * quantity;
-				priceSpan.textContent = totalOptionPrice.toLocaleString() + '원';
-	
-				updateTotalPrice();
-			});
-	
-			// 총 금액 계산 함수
-			function updateTotalPrice() {
-				let total = 0;
-	
-				selectedOptionsContainer.querySelectorAll('.selected-option-item').forEach(item => {
-					const quantity = parseInt(item.querySelector('.quantity').value);
-					const unitPrice = parseFloat(item.dataset.price);
-	
-					if (!isNaN(quantity) && !isNaN(unitPrice)) {
-						total += quantity * unitPrice;
-					}
-				});
-				
-				console.log(total.toLocaleString());
-	
-				totalPriceElement.textContent = `${total.toLocaleString()}원`;
-				console.log('총합계:', total);
+				return;
 			}
+	
+			if (optionStock <= 0) {
+				alert('해당 옵션은 재고가 없습니다.');
+				this.value = '';
+				return;
+			}
+	
+			selectedOptionIds.add(optionId);
+	
+			// 옵션 DOM 생성 (부모)
+			const optionItem = document.createElement('div');
+			optionItem.className = 'selected-option-item';
+			optionItem.dataset.optionId = optionId;
+			optionItem.dataset.price = optionPrice;
+			optionItem.dataset.stock = optionStock;
+	
+			// 옵션명 (자식)
+			const optionNameSpan = document.createElement('span');
+			optionNameSpan.className = 'option-name';
+			optionNameSpan.textContent = optionName;
+			optionItem.appendChild(optionNameSpan);
+	
+			// 수량 컨트롤 (자식)
+			const quantityControl = document.createElement('div');
+			quantityControl.className = 'quantity-control';
+	
+			const btnDecrease = document.createElement('button');
+			btnDecrease.type = 'button';
+			btnDecrease.className = 'decrease-btn';
+			btnDecrease.textContent = '-';
+	
+			const inputQuantity = document.createElement('input');
+			inputQuantity.type = 'text';
+			inputQuantity.className = 'quantity';
+			inputQuantity.value = 1;
+			inputQuantity.readOnly = true;
+	
+			const btnIncrease = document.createElement('button');
+			btnIncrease.type = 'button';
+			btnIncrease.className = 'increase-btn';
+			btnIncrease.textContent = '+';
+	
+			quantityControl.appendChild(btnDecrease);
+			quantityControl.appendChild(inputQuantity);
+			quantityControl.appendChild(btnIncrease);
+			optionItem.appendChild(quantityControl);
+	
+			// 개별 가격 (자식)
+			const priceSpan = document.createElement('span');
+			priceSpan.className = 'item-price';
+			priceSpan.textContent = (optionPrice * 1).toLocaleString() + '원';
+			optionItem.appendChild(priceSpan);
+	
+			// 삭제 버튼 (자식)
+			const removeBtn = document.createElement('button');
+			removeBtn.type = 'button';
+			removeBtn.className = 'remove-item-btn';
+			removeBtn.textContent = '×';
+			optionItem.appendChild(removeBtn);
+	
+			selectedOptionsContainer.appendChild(optionItem);
+			updateTotalPrice();
+	
+			this.value = '';
 		});
-	</script>
+		//  ↑↑↑부모 생성후 자식들은 생성한 순서대로 화면에 출력↑↑↑
+	
+		// 수량 변경 및 삭제 이벤트
+		selectedOptionsContainer.addEventListener('click', function (e) {
+			const target = e.target;
+			const optionItem = target.closest('.selected-option-item');
+			if (!optionItem) return;
+	
+			const quantityInput = optionItem.querySelector('.quantity');
+			let quantity = parseInt(quantityInput.value, 10);  // parseInt의 두번째 매개값은 진수를 의미해서 10진수로 해석
+			const stock = parseInt(optionItem.dataset.stock, 10);
+			const unitPrice = parseInt(optionItem.dataset.price, 10);
+			const priceSpan = optionItem.querySelector('.item-price');
+	
+			if (target.classList.contains('increase-btn')) { 
+				if (quantity < stock) {
+					quantity++;
+				} else {
+					alert('최대 구매 가능 수량은 ' + stock + '개 입니다.');
+				}
+			} else if (target.classList.contains('decrease-btn')) {
+				if (quantity > 1) {
+					quantity--;
+				}
+			} else if (target.classList.contains('remove-item-btn')) {
+				selectedOptionIds.delete(optionItem.dataset.optionId);
+				optionItem.remove();
+				updateTotalPrice();
+				return;
+			}
+	
+			quantityInput.value = quantity;
+	
+			// 개별 가격 업데이트
+			const totalOptionPrice = unitPrice * quantity;
+			priceSpan.textContent = totalOptionPrice.toLocaleString() + '원';
+	
+			updateTotalPrice();
+		});
+	
+		// 총 금액 계산 함수
+		function updateTotalPrice() {
+		    const items = document.querySelectorAll(".selected-option-item");
+		    let total = 0;
 
+		    // const totalPriceElement = document.getElementById('totalPrice');
+		    items.forEach(item => {
+		        const quantity = parseInt(item.querySelector(".quantity").value, 10);
+		        const unitPrice = parseInt(item.dataset.price, 10);
+
+		        if (!isNaN(quantity) && !isNaN(unitPrice)) {
+		            total += quantity * unitPrice;
+		        }
+		    });
+
+		    totalPriceElement.textContent = total.toLocaleString() + '원';
+		    // toLocaleString() -> 금액 단위에 ,표시 1000 - > 1,000으로 
+		    // totalPriceElement.textContent = `${total.toLocaleString()}원`;  `백틱 불량`
+		    //console.log('totalPrice:', total);
+
+		}
+
+	});
+	</script>
 
 </body>
 </html>
