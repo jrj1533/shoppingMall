@@ -3,56 +3,70 @@
 <mapper namespace="com.example.shoppingmall.mapper.OrderCartMapper">
 	
 	<!-- 주문내역 리스트 -->
-	<select id="selectOrderCartList" parameterType="com.example.shoppingmall.dto.OrderCart" resultType="com.example.shoppingmall.dto.OrderCart">
-		SELECT c.order_cart_no AS orderCartNo, 
-			   i.item_title AS title, 
-			   c.count AS count, 
-			   c.price AS price, 
-			   c.status AS orderStatus, 
-			   d.status AS deliveryStatus, 
-			   c.order_date AS orderDate
+	<select id="selectOrderCartList"  resultType="com.example.shoppingmall.dto.OrderCart">
+		SELECT o.order_no AS orderNo,
+			  MAX(i.item_title) AS itemTitle,
+			  COUNT(c.order_cart_no) AS itemCount,
+			  SUM(c.price) AS totalPrice,
+			  MAX(f.save_name) AS saveName,
+			  MAX(c.status) AS orderStatus,       
+			  MAX(o.order_date) AS orderDate
 		FROM order_cart c
 		INNER JOIN orders o ON  c.order_no = o.order_no
 		INNER JOIN delivery d ON o.order_no = d.order_no
 		INNER JOIN item i ON c.item_no = i.item_no
+		LEFT JOIN item_file f ON i.item_no = f.item_no 
 		<where>
-			<if test="search.title != null and search.title != ''">
-				AND i.item_title LIKE CONCAT('%', #{search.title}, '%')
+			o.username = #{search.username}
+			<if test="search.searchWord != null and search.searchWord != ''">
+				AND i.item_title LIKE CONCAT('%', #{search.searchWord}, '%')
 			</if>
-			
 			<if test="search.orderStatus != null and search.orderStatus != ''">
 				AND c.status = #{search.orderStatus}
 			</if>
-			
-			<if test="search.deliveryStatus != null and search.deliveryStatus != ''">
-				AND d.status = #{search.deliveryStatus}
-			</if>
 		</where>
-		ORDER BY c.order_date DESC
+		GROUP BY o.order_no
+		ORDER BY o.order_date DESC
 		LIMIT #{page.beginRow}, #{page.rowPerPage}
 	</select>
 	
 	<!-- 주문내역 총 개수 -->
-	<select id="totalCount" parameterType="com.example.shoppingmall.dto.OrderCart" resultType="int">
+	<select id="totalCount" resultType="int">
 		SELECT COUNT(*)
 		FROM order_cart c
 		INNER JOIN orders o ON  c.order_no = o.order_no
-		INNER JOIN delivery d ON o.order_no = d.order_no
 		INNER JOIN item i ON c.item_no = i.item_no
+		LEFT JOIN item_file f ON i.item_no = f.item_no 
 		<where>
-			<if test="search.title != null and search.title != ''">
-				AND i.item_title LIKE CONCAT('%', #{search.title}, '%')
+			o.username = #{search.username}
+			<if test="search.searchWord != null and search.searchWord != ''">
+				AND i.item_title LIKE CONCAT('%', #{search.searchWord}, '%')
 			</if>
-			
 			<if test="search.orderStatus != null and search.orderStatus != ''">
 				AND c.status = #{search.orderStatus}
 			</if>
 			
-			<if test="search.deliveryStatus != null and search.deliveryStatus != ''">
-				AND d.status = #{search.deliveryStatus}
-			</if>
 		</where>
+	</select>
 	
+	<!-- 주문내역 상세보기 -->
+	<!-- 받아야할게 2개이므로 map보다는 param으로 받기 -->
+	<select id="selectOrderCartDetail"  resultType="com.example.shoppingmall.dto.OrderCartItem">
+		SELECT  o.order_no AS orderNo,
+				c.order_cart_no AS orderCartNo,
+			    c.item_no AS itemNo,
+			    c.count,
+			    c.price,
+			    i.item_title AS itemTitle,
+			    f.save_name As itemImage,
+			    t.option_name AS optionName
+		FROM order_cart c
+		INNER JOIN orders o ON o.order_no = c.order_no
+		INNER JOIN item i ON i.item_no = c.item_no
+		LEFT JOIN item_file f ON i.item_no = f.item_no
+		LEFT JOIN item_option t ON i.item_no = t.item_no
+		WHERE o.username = #{username}
+		  AND o.order_no = #{orderNo}
 	</select>
 
 </mapper>

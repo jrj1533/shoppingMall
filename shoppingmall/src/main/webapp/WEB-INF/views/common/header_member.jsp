@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function(){
         <ul class="dropdown-menu">
         
           <li><a href="/profile"></a></li>
-        <li><a href="/orders">주문 내역</a></li>
+        <li><a href="/buyer/orderCartList">주문 내역</a></li>
         <li><a href="/logOut">로그아웃</a></li>
        </ul>
        </c:when>
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function(){
       <span class="arrow">▼</span>
        <ul class="dropdown-menu">
         <li><a href="/profile">내 정보</a></li>
-        <li><a href="/orders">주문 내역</a></li>
+        <li><a href="/buyer/orderCartList">주문 내역</a></li>
         <li><a href="/logOut">로그아웃</a></li>
       </ul>
     </div>

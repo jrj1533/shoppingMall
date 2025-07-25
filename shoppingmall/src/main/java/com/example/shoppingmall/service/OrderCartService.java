@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.shoppingmall.dto.OrderCart;
+import com.example.shoppingmall.dto.OrderCartItem;
 import com.example.shoppingmall.dto.OrderCartSearch;
 import com.example.shoppingmall.dto.Paging;
 import com.example.shoppingmall.mapper.OrderCartMapper;
@@ -28,4 +29,13 @@ public class OrderCartService {
 		public int totalCount(OrderCartSearch orderCartSearch) {
 			return orderCartMapper.totalCount(orderCartSearch);
 		}
+		
+		// 주문내역 상세보기
+		public List<OrderCartItem> selectOrderCartDetail(String username, String orderNo) {
+			
+			 System.out.println("username: " + username);
+			    System.out.println("orderNo: " + orderNo);
+			return orderCartMapper.selectOrderCartDetail(username, orderNo);
+		}
+
 }

@@ -61,7 +61,7 @@ import com.example.shoppingmall.service.MainPageService;
 	
 	  // 조회 시작 위치
 	  int beginRow = (page - 1) * size;
-	  log.info("endPage:"+endPage);
+	 // log.info("endPage:"+endPage);
 	  // 정렬 파라미터 전달
 	  List<Map<String,Object>> products = mainPageService.findProductsList(beginRow, size);
 	
