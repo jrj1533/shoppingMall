@@ -1,32 +1,52 @@
 
-$(function(){  //
-  $('#modalAddCart').on('click', function(e) {
-    e.preventDefault();
+$(function() {
+	$('#modalAddCart').on('click', function(e) {
+	  e.preventDefault();
 
-    
-    let data = $('#modalForm').serialize();
+	  // 1) 수량 0인 옵션 없이 만들기 (기존 코드)
+	  $('#modalForm input[name="count"]').each(function() {
+	    const $c = $(this);
+	    if (parseInt($c.val(), 10) === 0) {
+	      $c.prev('input[name="optionNo"]').remove();
+	      $c.remove();
+	    }
+	  });
 
-    
-    $.ajax({
-      url: '/api/insertCart',
-      type: 'POST',
-      data: data,
-      success: function(res) {
-        alert(res.message);
-        
-        $('#overlay, #detailModal').addClass('hidden');
-      },
-      error: function(xhr, status, err) {
-        console.error('장바구니 담기 실패:', err);
-        alert(err.message);
-        
-       
-      }
-    });
-    
-  });
+	  // 2) 필수값 추출
+	  const itemNo = $('#modalForm .modal-itemNo').val();
+	  const $selLi = $('#modalOptionsList li').filter(function(){
+	    return parseInt($(this).find('input[name="count"]').val(), 10) > 0;
+	  });
 
+	  if (!$selLi.length) {
+	    alert('옵션을 하나 선택해주세요.');
+	    return;
+	  }
+
+	  const optionNo = $selLi.find('input[name="optionNo"]').val();
+	  const countVal = $selLi.find('input[name="count"]').val();
+
+	  // 3) AJAX 전송 (한 건씩만)
+	  $.ajax({
+	    url:  '/api/insertCart',
+	    type: 'POST',
+	    data: {
+	      itemNo:   itemNo,
+	      optionNo: optionNo,
+	      count:    countVal
+	    },
+	    success: function(res) {
+	      alert(res.message);
+	      $('#overlay, #detailModal').addClass('hidden');
+	    },
+	    error: function(xhr, status, err) {
+	      console.error('장바구니 담기 실패:', err);
+	      alert(err.message);
+	    }
+	  });
+	});
 });
+
 
 
 $(function(){
@@ -147,7 +167,6 @@ $(function(){
 	  // 1) 대표 이미지 & 기본 정보 + 히든 필드
 	  let imgUrl = ctx + '/upload/' + dto.saveName;
 	  $('#modalImg').attr('src', imgUrl);
-		
 	  $('.modal-title').text(dto.itemTitle);
 	  $('.modal-itemNo').val(dto.itemNo);
 	  $('.modal-desc').text(dto.itemContent || '');

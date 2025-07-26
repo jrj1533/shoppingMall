@@ -43,7 +43,7 @@ $(function(){
             .append(
               $('<div>').addClass('details')
                 .append($('<p>').addClass('title')
-                                .text(dto.item.itemTitle + (dto.option ? ' / ' + dto.option.optionName : '')))
+                                .text(dto.item.itemTitle + (dto.option ? ' /' + dto.option.optionName + ' '+ dto.option.optionValue: '')))
                 .append($('<p>').addClass('price')
                                 .text(lineTotal.toLocaleString() + '원'))
                 .append(

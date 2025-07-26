@@ -84,7 +84,11 @@ import com.example.shoppingmall.service.MainPageService;
  
 	 
 	 @PostMapping("/insertCart")
-	 public ResponseEntity<?> insertCart(Cart cart) {
+	 public ResponseEntity<?> insertCart(Cart cart, HttpSession session) {
+		 
+		 String username = (String) session.getAttribute("username");
+		 cart.setUsername(username);
+		 
 		 if(cartService.insertcart(cart) == 1) {
 			 return ResponseEntity.ok(Collections.singletonMap("message", "입력성공"));
 		 }
