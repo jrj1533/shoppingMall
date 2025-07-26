@@ -1,5 +1,7 @@
 package com.example.shoppingmall.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.example.shoppingmall.dto.Cart;
@@ -15,7 +17,21 @@ public class CartService {
 	
 	
 	public int insertcart(Cart cart) {
-		 return cartMapper.insertcart(cart);
+		int result = 0;
+		if(cartMapper.existsByItemNo(cart)){
+			result = cartMapper.updatecartCount(cart); // itemNo와 optionNo 가 같은것이 있으면 update를 해줘야한다. 
+			
+		} else { 
+			result = cartMapper.insertcart(cart);   // cart를 추가한다.
+		}
+		
+		return result;
+	}
+
+
+	public List<Cart> selectAllcartByusername(String username) {
+		return null;
+		// TODO Auto-generated method stub
 		
 	}
 

@@ -6,4 +6,17 @@ INSERT INTO cart ( username, item_no, option_no, count) VALUES(#{username}, #{it
 
 </insert>
 
+<select id="existsByItemNo"  parameterType="com.example.shoppingmall.dto.Cart" >
+	SELECT EXISTS(
+		SELECT 1 FROM cart WHERE item_no = #{itemNo} and option_no = #{optionNo} and username = #{username}
+	)
+</select>
+
+<update id="updatecartCount" parameterType="com.example.shoppingmall.dto.Cart">
+	UPDATE 
+		cart SET `count` = `count` + #{count} 
+	WHERE item_no = #{itemNo} and option_no = #{optionNo} and username = #{username}
+
+</update>
+
 </mapper>
