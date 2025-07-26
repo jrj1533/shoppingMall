@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.shoppingmall.dto.Cart;
+import com.example.shoppingmall.dto.CartDto;
 import com.example.shoppingmall.mapper.CartMapper;
 
 @Service
@@ -29,9 +30,9 @@ public class CartService {
 	}
 
 
-	public List<Cart> selectAllcartByusername(String username) {
-		return null;
-		// TODO Auto-generated method stub
+	public List<CartDto> selectAllcartByusername(String username) {
+		 return cartMapper.findCartByUsername(username);
+		
 		
 	}
 
