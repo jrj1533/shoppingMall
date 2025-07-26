@@ -19,62 +19,85 @@ INSERT INTO cart ( username, item_no, option_no, count) VALUES(#{username}, #{it
 
 </update>
 
-<resultMap id="cartResultMap" type="com.example.shoppingmall.dto.CartDto">
-<!--  기본 컬럼 -->
-<id column="c_cart_no" property="cartNo"/>
-<result column="c_username" property="username"/>
-<result column="c_count" property="count"/>
-<result column="c_create_date" property="createDate"/>
+  <resultMap id="cartResultMap" type="com.example.shoppingmall.dto.CartDto">
+    <!-- Cart 기본 컬럼 -->
+    <id     column="c_cart_no"     property="cartNo"/>
+    <result column="c_username"    property="username"/>
+    <result column="c_count"       property="count"/>
+    <result column="c_create_date" property="createDate"/>
 
-<!--  상품 정보 매핑 -->
-<association property="item" javaType="com.example.shoppingmall.dto.ItemDto">
+    <!-- 상품 정보 매핑 -->
+    <association property="item" javaType="com.example.shoppingmall.dto.ItemDto">
+      <id     column="i_item_no"       property="itemNo"/>
+      <result column="i_item_category" property="category"/>
+      <result column="i_item_title"    property="itemTitle"/>
+      <result column="i_item_amount"   property="itemAmount"/>
+      <result column="f_save_name"     property="saveName"/>
+    </association>
 
-<id column="i_item_no" property="itemNo"/>
-<result column="i_item_category"  property="category"/>
-<result column="i_item_title" property="itemTitle"/>
-<result column="i_item_amount" property="itemAmount"/>
-<result column="f_save_name" property="saveName"/>
+    <!-- 옵션 정보 매핑 -->
+    <association property="option" javaType="com.example.shoppingmall.dto.ItemOption">
+      <id     column="o_option_no"    property="optionNo"/>
+      <result column="o_option_name"  property="optionName"/>
+      <result column="o_option_value" property="optionValue"/>
+      <result column="o_option_stock" property="stock"/>
 
-</association>
+    </association>
 
-<!--  옵션 정보 매핑 -->
-<association property="option" javaType="com.example.shoppingmall.dto.ItemOption">
-<id     column="o_option_no"  property="optionNo"/>
-<result column="o_option_name" property="optionName"/>
-<result column="o_option_value" property="optionValue"/>
-<result column="o_option_stock" property="stock"/>
-</association>
+    <!-- 사용자 주소 매핑 -->
+    <association property="address" javaType="com.example.shoppingmall.dto.Address">
+      <id     column="ua_address_no" property="addressNo"/>
+      <result column="a_address"      property="address"/>
+      <result column="a_address2"     property="address2"/>
+      <result column="a_post_code"    property="postCode"/>
+    </association>
+  </resultMap>
 
-</resultMap>
+  <select id="findCartByUsername"
+          parameterType="string"
+          resultMap="cartResultMap">
+    SELECT
+      /* Cart 기본 */
+      c.cart_no     AS c_cart_no,
+      c.username    AS c_username,
+      c.count       AS c_count,
+      c.create_date AS c_create_date,
 
+      /* Item */
+      i.item_no     AS i_item_no,
+      i.category    AS i_item_category,
+      i.item_title  AS i_item_title,
+      i.item_amount AS i_item_amount,
+      f.save_name   AS f_save_name,
 
-<select id="findCartByUsername" parameterType="string" resultMap="cartResultMap">
+      /* Option */
+      o.option_no    AS o_option_no,
+      o.option_name  AS o_option_name,
+      o.option_value AS o_option_value,
+      o.stock        AS o_option_stock,
 
-  SELECT
-    c.cart_no     AS c_cart_no,
-    c.username    AS c_username,
-    c.count       AS c_count,
-    c.create_date AS c_create_date,
+      /* User Address */
+      ua.address_no  AS ua_address_no,
+      a.address      AS a_address,
+      a.address2     AS a_address2,
+      a.post_code    AS a_post_code
+    FROM cart c
+      JOIN item        i  ON c.item_no   = i.item_no
+      LEFT JOIN item_file f ON i.item_no   = f.item_no AND f.file_order = 1
+      JOIN item_option o  ON c.option_no = o.option_no
+      LEFT JOIN user_address ua ON ua.username   = c.username
+      LEFT JOIN address      a  ON a.address_no = ua.address_no
+    WHERE c.username = #{username}
+  </select>
 
-    i.item_no     AS i_item_no,
-    i.category    AS i_item_category,
-    i.item_title  AS i_item_title,
-    i.item_amount AS i_item_amount,
-
-    f.save_name   AS f_save_name,
-
-    o.option_no    AS o_option_no,
-    o.option_name  AS o_option_name,
-    o.option_value AS o_option_value,
-    o.stock        AS o_option_stock
-
-  FROM cart c
-  JOIN item        i ON c.item_no   = i.item_no
-  LEFT JOIN item_file f ON i.item_no = f.item_no
-                      AND f.file_order = 1
-  JOIN item_option o ON c.option_no = o.option_no
-  WHERE c.username = #{username}
-
-</select>
-
+	<delete id="deletecartItem" parameterType="int">
+		DELETE FROM cart
+		WHERE cart_no = #{cartNo};
+	</delete>
+	
+	
+	<delete id="deletecartItems" parameterType="String">
+		DELETE FROM cart
+		WHERE username = #{username};
+	</delete>
 </mapper>

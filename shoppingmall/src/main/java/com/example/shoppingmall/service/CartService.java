@@ -36,4 +36,17 @@ public class CartService {
 		
 	}
 
+
+	public void deletecartItem(int cartNo) { // 하나의 카트 아이템 삭제
+		 cartMapper.deletecartItem(cartNo);
+		
+	}
+
+
+	public int deletecartItems(String username) { // 전체 카트 아이템 삭제
+		return cartMapper.deletecartItems(username);
+		
+		
+	}
+
 }

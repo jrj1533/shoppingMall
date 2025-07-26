@@ -10,6 +10,7 @@ public class CartDto {
 	private String username;
 	private ItemDto item;
 	private ItemOption option;
+	private Address address; 
 	private int count;
 	private LocalDate createDate;
 }

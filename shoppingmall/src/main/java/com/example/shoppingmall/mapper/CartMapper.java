@@ -19,5 +19,11 @@ public interface CartMapper {
 
 	List<CartDto> findCartByUsername(String username); // 전체 카트 항목 불러오기
 
+	void deletecartItem(int cartNo);  // 카트 아이템 삭제
+
+	int deletecartItems(String username); // 전체 카트 아이템 삭제
+
+
+
 
 }
